@@ -14,17 +14,15 @@
             --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
         }
         body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-base); color: var(--text-main); -webkit-font-smoothing: antialiased; }
-        
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px; background: rgba(11, 11, 15, 0.9); backdrop-filter: blur(15px);
             position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo { font-size: 20px; font-weight: 700; background: linear-gradient(45deg, #FF7B00, #FFB703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        
         .header-right { display: flex; align-items: center; gap: 10px; }
         select.location-dropdown { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 5px; border-radius: 10px; font-size: 11px; outline: none; }
-        .login-btn { background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .login-btn { background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
         .user-profile { display: none; align-items: center; gap: 8px; }
         .profile-pic { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--primary); }
 
@@ -43,13 +41,16 @@
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        .native-link-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-decoration: none; color: white; text-align: center; }
+        .native-link-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-decoration: none; color: white; }
         .instagram-card { background: var(--ig-gradient); }
 
         .product-list { padding: 15px; background: rgba(0,0,0,0.2); }
         .product-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
         .price-tag { margin-left: auto; color: #4ade80; font-weight: 700; }
         
+        .bargain-board { background: rgba(255, 183, 3, 0.1); padding: 10px 15px; border-top: 1px solid rgba(255, 183, 3, 0.2); font-size: 11px; }
+        .bargain-tag { color: var(--accent); font-weight: 700; margin-right: 5px; }
+
         .action-bar { display: flex; justify-content: space-between; padding: 10px 15px; border-top: 1px solid rgba(255,255,255,0.05); }
         .icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; }
     </style>
@@ -61,12 +62,16 @@
         <div class="header-right">
             <select id="city-selector" class="location-dropdown" onchange="handleDropdownChange(this.value)">
                 <option value="delhi">Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="pune">Pune</option>
                 <option value="kolkata">Kolkata</option>
                 <option value="jaipur">Jaipur</option>
-                <option value="mumbai">Mumbai</option>
                 <option value="lucknow">Lucknow</option>
-                <option value="varanasi">Varanasi</option>
                 <option value="patna">Patna</option>
+                <option value="bhopal">Bhopal</option>
+                <option value="varanasi">Varanasi</option>
+                <option value="indore">Indore</option>
             </select>
             <button id="login-btn" class="login-btn" onclick="signIn()">Login</button>
             <div id="user-info" class="user-profile">
@@ -96,7 +101,6 @@
     </div>
 
     <script>
-        // --- FIREBASE CONFIG (Add yours here) ---
         const firebaseConfig = { apiKey: "YOUR_KEY", authDomain: "YOUR_DOMAIN", projectId: "YOUR_ID", appId: "YOUR_APP" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -112,36 +116,50 @@
             }
         });
 
-        // --- THE FULL NATIONWIDE DATABASE (V13.0) ---
+        // --- THE FULL NATIONWIDE DATABASE (V15.0) ---
         const masterDictionary = {
             "delhi": [
-                { id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", finds: [{n: "Antique Mirrors", p: "₹600"}] },
-                { id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat", finds: [{n: "Silver Jewelry", p: "₹350"}] },
-                { id: "wpPnBZOggAE", platform: "youtube", market: "Lajpat Nagar", finds: [{n: "Fabrics", p: "₹200/m"}] }
+                { id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", finds: [{n: "Mirrors", p: "₹600"}], bargain: "Last bought for ₹500 in March" },
+                { id: "wpPnBZOggAE", platform: "youtube", market: "Lajpat Nagar Central", finds: [{n: "Embroidered Fabrics", p: "₹200/m"}], bargain: "Buy in bulk for ₹150/m" },
+                { id: "qM5Ycwz8-LA", platform: "youtube", market: "Rajouri Garden", finds: [{n: "Apparel", p: "₹350"}], bargain: "Huge variety for weddings" },
+                { id: "_sfG8_xYdZc", platform: "youtube", market: "Chandni Chowk Hidden Gems", finds: [{n: "Antiques", p: "₹1000+"}], bargain: "Street food must try" }
             ],
             "kolkata": [
-                { id: "kcjqDg0hmRE", platform: "youtube", market: "Galiff Street Sunday Bazaar", finds: [{n: "Rare Plants", p: "₹100+"}, {n: "Terracotta Pots", p: "₹50"}] },
-                { id: "399kxCYl7Yw", platform: "youtube", market: "Gariahat Market", finds: [{n: "Bengali Sarees", p: "₹800"}, {n: "Oxidized Jewelry", p: "₹120"}] },
-                { id: "n8EHivRgbkY", platform: "youtube", market: "New Market (Hogg Market)", finds: [{n: "Leather Bags", p: "₹450"}, {n: "Silver Trinkets", p: "₹200"}] }
+                { id: "kcjqDg0hmRE", platform: "youtube", market: "Galiff Street Sunday Bazaar", finds: [{n: "Plants", p: "₹100"}, {n: "Pet Supplies", p: "₹250"}], bargain: "Go before 8 AM for best rates" },
+                { id: "5pwIPNmxqag", platform: "youtube", market: "New Market (Esplanade)", finds: [{n: "Accessories", p: "₹200"}, {n: "Footwear", p: "₹300"}], bargain: "Summer 2026 Collection live" },
+                { id: "V-3bALJOmek", platform: "youtube", market: "Hatibagan Street Shopping", finds: [{n: "Jewelry", p: "₹100"}, {n: "Bags", p: "₹350"}], bargain: "Crazy budget deals here" }
             ],
             "jaipur": [
-                { id: "kCdTLhyzl8A", platform: "youtube", market: "Bapu Bazaar", finds: [{n: "Mojaris (Juttis)", p: "₹300"}, {n: "Hand-block Kurti", p: "₹450"}] },
-                { id: "qKUW-l4Hy6M", platform: "youtube", market: "Johari Bazaar", finds: [{n: "Precious Stones", p: "₹1000+"}, {n: "Lac Bangles", p: "₹150"}] },
-                { id: "EBgfpsQSqnM", platform: "instagram", market: "Blue Pottery Tour", finds: [{n: "Floral Vases", p: "₹400"}, {n: "Soap Dispensers", p: "₹250"}] }
-            ],
-            "varanasi": [
-                { id: "Rf1IHg85_TQ", platform: "youtube", market: "Thatheri Bazaar", finds: [{n: "Brass Idols", p: "₹500"}, {n: "Copper Tumblers", p: "₹350"}] },
-                { id: "Rf1IHg85_TQ", platform: "youtube", market: "Vishwanath Galli", finds: [{n: "Wooden Toys", p: "₹120"}, {n: "Banarasi Dupatta", p: "₹400"}] }
-            ],
-            "mumbai": [
-                { id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", finds: [{n: "Kitchenware", p: "₹150"}, {n: "Lanterns", p: "₹200"}] },
-                { id: "vDAtD6iE1Xo", platform: "youtube", market: "Colaba Causeway", finds: [{n: "Vintage Watches", p: "₹450"}, {n: "Beaded Purses", p: "₹300"}] }
+                { id: "8C7L-2hb4P4", platform: "youtube", market: "Johari Bazaar & Maniharo Ka Rasta", finds: [{n: "Lac Bangles", p: "₹150"}, {n: "Oxidized Jewelry", p: "₹250"}], bargain: "Quotes ₹600, give ₹300" },
+                { id: "CJph9WPNMDA", platform: "youtube", market: "LN Textile Jaipur", finds: [{n: "Kurtis", p: "₹450"}], bargain: "Wholesale factory prices" },
+                { id: "RIsVxnKn5XE", platform: "youtube", market: "Himachal Woolen Market", finds: [{n: "Sweaters", p: "₹60"}], bargain: "Cheaper than Tibet Market" }
             ],
             "lucknow": [
-                { id: "8TWLIsL6fXM", platform: "youtube", market: "Aminabad", finds: [{n: "Chikan Kurti", p: "₹650"}, {n: "Mughal Lamps", p: "₹400"}] }
+                { id: "r68AdSRgf4c", platform: "youtube", market: "Hazratganj Ganj-ing", finds: [{n: "Modern Apparel", p: "₹700"}], bargain: "Best for evening strolls" },
+                { id: "7BOla3-hyRs", platform: "youtube", market: "Aminabad Holi Spl", finds: [{n: "Chikan Work", p: "₹650"}], bargain: "Festival discounts available" }
+            ],
+            "varanasi": [
+                { id: "WtrAo7gfhs8", platform: "youtube", market: "Varanasi Budget Tour", finds: [{n: "Silk Sarees", p: "₹1500"}], bargain: "Avoid middle-men near Ghats" },
+                { id: "nK0_2HZzZ6g", platform: "youtube", market: "Vyom Suits Collection", finds: [{n: "Banarasi Suits", p: "₹500"}], bargain: "Factory direct rates" }
+            ],
+            "mumbai": [
+                { id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", finds: [{n: "Decor", p: "₹200"}], bargain: "Bargain hard in electrical lane" },
+                { id: "vDAtD6iE1Xo", platform: "youtube", market: "Colaba Causeway", finds: [{n: "Vintage Watches", p: "₹450"}], bargain: "Fixed Price in shops, bargain on street" }
+            ],
+            "bangalore": [
+                { id: "1h_wt99EhXQ", platform: "youtube", market: "Chickpet", finds: [{n: "Silk Sarees", p: "₹1200"}], bargain: "Wholesale hub of South" }
+            ],
+            "pune": [
+                { id: "aGl_H_gGf_o", platform: "youtube", market: "Juna Bazaar", finds: [{n: "Antiques", p: "₹400"}], bargain: "Open only on Wednesday/Sunday" }
             ],
             "patna": [
-                { id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", finds: [{n: "Bamboo Work", p: "₹250"}, {n: "Madhubani Art", p: "₹300"}] }
+                { id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", finds: [{n: "Handicrafts", p: "₹250"}], bargain: "Fixed government rates" }
+            ],
+            "bhopal": [
+                { id: "rsOPFJebPMg", platform: "youtube", market: "New Market", finds: [{n: "Beadwork", p: "₹200"}], bargain: "Ask for Bhopal specials" }
+            ],
+            "indore": [
+                { id: "7LyTGXM3haU", platform: "youtube", market: "MT Cloth Market", finds: [{n: "Curtains", p: "₹600"}], bargain: "Bulk purchase discounts" }
             ]
         };
 
@@ -151,12 +169,11 @@
             list.forEach(v => {
                 const card = document.createElement("div"); card.className = "video-card";
                 let media = `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div>`;
-                if(v.platform === "instagram") {
-                    media = `<a href="https://instagram.com/reels/${v.id}" target="_blank" class="native-link-card instagram-card"><div>▶</div><p style="font-size:11px;font-weight:700;">OPEN IN INSTAGRAM</p></a>`;
-                }
-                card.innerHTML = media + `<div class="product-list"><div style="font-size:10px; color:var(--accent); margin-bottom:8px">MAPPED AT ${v.market.toUpperCase()}</div>` + 
-                    v.finds.map(f => `<div class="product-item">✨ ${f.n} <span class="price-tag">${f.p}</span></div>`).join("") + 
-                    `</div><div class="action-bar"><button class="icon-btn">☆ Save</button><button class="icon-btn" onclick="window.open('https://wa.me/?text=Look! https://youtu.be/${v.id}')">📲 Share</button></div>`;
+                card.innerHTML = media + 
+                    `<div class="product-list"><div style="font-size:10px; color:var(--accent); margin-bottom:8px">MAPPED AT ${v.market.toUpperCase()}</div>` + 
+                    v.finds.map(f => `<div class="product-item">✨ ${f.n} <span class="price-tag">${f.p}</span></div>`).join("") + `</div>` +
+                    `<div class="bargain-board"><span class="bargain-tag">💡 BARGAIN TIP:</span> ${v.bargain}</div>` +
+                    `<div class="action-bar"><button class="icon-btn">☆ Save</button><button class="icon-btn" onclick="window.open('https://wa.me/?text=Check this! https://youtu.be/${v.id}')">📲 Share</button></div>`;
                 feed.appendChild(card);
             });
         }
