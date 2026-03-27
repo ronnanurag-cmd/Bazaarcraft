@@ -16,29 +16,25 @@
             --text-main: #FFFFFF;
             --text-muted: #A0A0B0;
             --accent: #FFB703;
+            --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --fb-color: #1877F2;
         }
 
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--bg-base);
-            color: var(--text-main);
+            margin: 0; font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-base); color: var(--text-main);
             -webkit-font-smoothing: antialiased;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 15px;
-            background-color: rgba(11, 11, 15, 0.9);
-            backdrop-filter: blur(15px); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 15px; background-color: rgba(11, 11, 15, 0.9);
+            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky; top: 0; z-index: 1000;
         }
 
         .logo {
-            font-size: 18px; font-weight: 700;
+            font-size: 20px; font-weight: 700;
             background: linear-gradient(45deg, #FF7B00, #FFB703);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-decoration: none;
@@ -46,30 +42,26 @@
 
         .header-right { display: flex; align-items: center; gap: 10px; }
 
-        /* Login Button Styling */
+        select.location-dropdown {
+            background: rgba(255, 255, 255, 0.05); color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 8px;
+            border-radius: 12px; font-size: 11px; outline: none;
+        }
+
         .login-btn {
-            background: var(--primary);
-            color: white; border: none; padding: 6px 14px;
-            border-radius: 12px; font-size: 11px; font-weight: 600;
-            cursor: pointer;
+            background: var(--primary); color: white; border: none; padding: 6px 14px;
+            border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer;
         }
 
-        .user-profile {
-            display: none; /* Hidden until login */
-            align-items: center; gap: 8px;
-        }
+        .user-profile { display: none; align-items: center; gap: 8px; }
+        .profile-pic { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--primary); }
 
-        .profile-pic {
-            width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--primary);
-        }
-
-        /* Hero & Content */
         .hero {
-            text-align: center; padding: 40px 20px 20px;
+            text-align: center; padding: 50px 20px 30px;
             background: radial-gradient(circle at top, rgba(255, 123, 0, 0.1) 0%, transparent 70%);
         }
 
-        .quote { font-size: 1.4rem; font-weight: 300; font-style: italic; color: var(--accent); margin-bottom: 20px; }
+        .quote { font-size: 1.6rem; font-weight: 300; font-style: italic; color: var(--accent); margin-bottom: 20px; }
 
         .search-container {
             display: flex; max-width: 450px; margin: 0 auto;
@@ -77,27 +69,42 @@
             border-radius: 25px; padding: 4px;
         }
 
-        .search-input { flex: 1; background: transparent; border: none; padding: 8px 15px; color: white; outline: none; }
+        .search-input { flex: 1; background: transparent; border: none; padding: 10px 20px; color: white; outline: none; }
+        .search-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; }
 
-        .search-btn { background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px 60px; }
 
-        .container { max-width: 550px; margin: 0 auto; padding: 20px 15px 60px; }
+        .section-title {
+            font-size: 1.4rem; margin-bottom: 25px; color: var(--text-main); font-weight: 600;
+            border-left: 4px solid var(--primary); padding-left: 15px;
+        }
 
         .video-card {
-            background: var(--surface); border-radius: 16px; overflow: hidden;
-            margin-bottom: 30px; border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--surface); border-radius: 20px; overflow: hidden;
+            margin-bottom: 40px; border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         .video-wrapper.youtube { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-wrapper.youtube iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        .product-list { padding: 15px; background: rgba(0,0,0,0.2); }
-        .product-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .product-info h5 { margin: 0; font-size: 13px; }
-        .price-chip { margin-left: auto; color: #4ade80; font-weight: 700; font-size: 12px; }
+        .native-link-card {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 60px 20px; text-decoration: none; color: white; text-align: center;
+        }
+        .native-link-card.instagram { background: var(--ig-gradient); }
+        .native-link-card.facebook { background: var(--fb-color); }
 
-        .action-bar { display: flex; justify-content: space-between; padding: 10px 15px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; }
+        .product-list { padding: 20px; background: rgba(0,0,0,0.15); }
+        .product-list-title { font-size: 13px; color: var(--accent); margin-bottom: 15px; font-weight: 600; text-transform: uppercase; }
+        
+        .product-item { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
+        .product-info h5 { margin: 0; font-size: 14px; }
+        .price-chip { margin-left: auto; color: #4ade80; font-weight: 700; font-size: 13px; }
+
+        .action-bar { display: flex; justify-content: space-between; padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 12px; cursor: pointer; }
+        .icon-btn.saved { color: var(--primary); }
     </style>
 </head>
 <body>
@@ -105,10 +112,17 @@
     <header>
         <a href="index.html" class="logo">BazaarCraft</a>
         <div class="header-right">
-            <button id="login-btn" class="login-btn" onclick="signIn()">Login with Google</button>
+            <select id="city-selector" class="location-dropdown" onchange="handleDropdownChange(this.value)">
+                <option value="delhi">Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="jaipur">Jaipur</option>
+                <option value="lucknow">Lucknow</option>
+                <option value="patna">Patna</option>
+            </select>
+            <button id="login-btn" class="login-btn" onclick="signIn()">Login</button>
             <div id="user-info" class="user-profile">
                 <img id="user-pic" class="profile-pic" src="" alt="">
-                <span id="user-name" style="font-size: 11px;"></span>
+                <span id="user-name" style="font-size: 11px; cursor:pointer;" onclick="showBookmarks()">My Saves</span>
                 <button class="icon-btn" onclick="signOut()" style="color:var(--primary)">Logout</button>
             </div>
         </div>
@@ -117,18 +131,18 @@
     <div class="hero">
         <h1 class="quote">"True aesthetic is hidden in our galis."</h1>
         <div class="search-container">
-            <input type="text" id="market-search" class="search-input" placeholder="Search Banjara, Brass..." onkeypress="handleEnter(event)">
-            <button class="search-btn" onclick="executeSearch()">Go</button>
+            <input type="text" id="market-search" class="search-input" placeholder="Search (Banjara, Brass, Furniture...)" onkeypress="handleEnter(event)">
+            <button class="search-btn" onclick="executeSearch()">Search</button>
         </div>
     </div>
 
     <div class="container">
-        <h2 id="video-city-title" style="font-size: 1.2rem; border-left: 3px solid var(--primary); padding-left: 10px;">Trending</h2>
+        <h2 class="section-title">Viewing: <span id="video-city-title" style="color: var(--primary);">Trending</span></h2>
         <div id="video-feed"></div>
     </div>
 
     <script>
-        // --- 1. CONFIGURATION (REPLACE WITH YOUR DATA) ---
+        // --- 1. FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -138,67 +152,98 @@
             appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        // --- 2. AUTH LOGIC ---
-        function signIn() {
-            auth.signInWithPopup(provider).catch(error => alert(error.message));
-        }
+        function signIn() { auth.signInWithRedirect(provider); }
+        function signOut() { auth.signOut(); }
 
-        function signOut() {
-            auth.signOut();
-        }
+        auth.getRedirectResult().then((result) => { if (result.user) console.log("Login Success"); });
 
-        // Monitor Login State
         auth.onAuthStateChanged(user => {
+            const loginBtn = document.getElementById('login-btn');
+            const userInfo = document.getElementById('user-info');
             if (user) {
-                document.getElementById('login-btn').style.display = 'none';
-                document.getElementById('user-info').style.display = 'flex';
+                loginBtn.style.display = 'none'; userInfo.style.display = 'flex';
                 document.getElementById('user-pic').src = user.photoURL;
-                document.getElementById('user-name').innerText = user.displayName.split(" ")[0];
+                document.getElementById('user-name').innerText = user.displayName.split(" ")[0] + "'s Saves";
             } else {
-                document.getElementById('login-btn').style.display = 'block';
-                document.getElementById('user-info').style.display = 'none';
+                loginBtn.style.display = 'block'; userInfo.style.display = 'none';
             }
         });
 
-        // --- 3. THE REST OF YOUR APP LOGIC ---
+        // --- 2. DATA ---
         const masterDictionary = {
-            "delhi": [{ id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", topFinds: [{name: "Vases", price: "₹150", img: "🏺"}] }],
-            "jaipur": [{ id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", topFinds: [{name: "Jewelry", price: "₹300", img: "💍"}] }]
+            "delhi": [
+                {
+                    id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market",
+                    topFinds: [{ name: "Ceramic Vases", price: "₹150", shop: "Lane 2", img: "🏺" }]
+                },
+                {
+                    id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat",
+                    topFinds: [{ name: "Boho Decor", price: "₹400", shop: "Stall 12", img: "✨" }]
+                }
+            ],
+            "jaipur": [
+                {
+                    id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar",
+                    topFinds: [{ name: "Silver Jewelry", price: "₹300+", shop: "Street Vendors", img: "💍" }]
+                }
+            ]
         };
 
+        // --- 3. APP LOGIC ---
         function renderFeed(videoList) {
             const feed = document.getElementById('video-feed');
             feed.innerHTML = "";
-            if (!videoList) return;
+            const saved = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+
+            if (!videoList || videoList.length === 0) {
+                feed.innerHTML = "<p style='text-align:center; color:var(--text-muted)'>No results found.</p>";
+                return;
+            }
 
             videoList.forEach(video => {
-                const card = document.createElement("div");
-                card.className = "video-card";
-                card.innerHTML = `
-                    <div class="video-wrapper youtube"><iframe src="https://www.youtube.com/embed/${video.id}"></iframe></div>
-                    <div class="product-list">
-                        <div style="font-size:11px;color:var(--accent);margin-bottom:10px">BEST FINDS: ${video.market}</div>
-                        ${video.topFinds.map(i => `<div class="product-item"><span>${i.img}</span><div class="product-info"><h5>${i.name}</h5></div><div class="price-chip">${i.price}</div></div>`).join("")}
-                    </div>
-                    <div class="action-bar">
-                        <button class="icon-btn">☆ Save</button>
-                        <button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Check this! https://youtu.be/${video.id}')">📲 Share</button>
-                    </div>`;
+                const card = document.createElement("div"); card.className = "video-card";
+                
+                let media = "";
+                if (video.platform === "youtube") {
+                    media = `<div class="video-wrapper youtube"><iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe></div>`;
+                } else {
+                    const url = video.platform === "instagram" ? `https://www.instagram.com/reels/${video.id}/` : `https://www.facebook.com/watch/?v=${video.id}`;
+                    media = `<a href="${url}" target="_blank" class="native-link-card ${video.platform}"><div class="play-icon">▶</div><p>Watch on ${video.platform.toUpperCase()}</p></a>`;
+                }
+
+                let products = `<div class="product-list"><div class="product-list-title">Top Finds: ${video.market}</div>`;
+                video.topFinds.forEach(item => {
+                    products += `<div class="product-item"><span>${item.img}</span><div class="product-info"><h5>${item.name}</h5><p>${item.shop}</p></div><div class="price-chip">${item.price}</div></div>`;
+                });
+                products += `</div>`;
+
+                const isSaved = saved.includes(video.id);
+                const actions = `<div class="action-bar"><button class="icon-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave('${video.id}', this)">${isSaved ? '★ Saved' : '☆ Save'}</button><button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Look! https://youtu.be/${video.id}')">📲 Share</button></div>`;
+
+                card.innerHTML = media + products + actions;
                 feed.appendChild(card);
             });
         }
 
-        function executeSearch() {
-            const term = document.getElementById('market-search').value.toLowerCase().trim();
-            renderFeed(masterDictionary[term] || []);
+        function toggleSave(id, btn) {
+            let saved = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+            if (saved.includes(id)) { saved = saved.filter(i => i !== id); btn.classList.remove('saved'); btn.innerText = "☆ Save"; } 
+            else { saved.push(id); btn.classList.add('saved'); btn.innerText = "★ Saved"; }
+            localStorage.setItem('bazaarSavesV7', JSON.stringify(saved));
         }
 
+        function handleDropdownChange(val) { document.getElementById('video-city-title').innerText = val.toUpperCase(); renderFeed(masterDictionary[val]); }
+        function executeSearch() { const term = document.getElementById('market-search').value.toLowerCase().trim(); renderFeed(masterDictionary[term] || []); }
         function handleEnter(e) { if (e.key === "Enter") executeSearch(); }
+        function showBookmarks() {
+            const savedIds = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+            const all = Object.values(masterDictionary).flat();
+            renderFeed(all.filter(v => savedIds.includes(v.id)));
+        }
 
         window.onload = () => renderFeed(masterDictionary["delhi"]);
     </script>
