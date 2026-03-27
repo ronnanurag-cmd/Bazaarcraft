@@ -17,7 +17,6 @@
             --text-muted: #A0A0B0;
             --accent: #FFB703;
             --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            --fb-color: #1877F2;
         }
 
         body {
@@ -41,12 +40,6 @@
         }
 
         .header-right { display: flex; align-items: center; gap: 10px; }
-
-        select.location-dropdown {
-            background: rgba(255, 255, 255, 0.05); color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 8px;
-            border-radius: 12px; font-size: 11px; outline: none;
-        }
 
         .login-btn {
             background: var(--primary); color: white; border: none; padding: 6px 14px;
@@ -79,6 +72,24 @@
             border-left: 4px solid var(--primary); padding-left: 15px;
         }
 
+        /* --- New Curated Decor Section --- */
+        .curated-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 40px;
+        }
+
+        .curated-card {
+            background: var(--surface); border-radius: 15px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: inherit;
+            transition: transform 0.2s;
+        }
+
+        .curated-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+        .curated-img { width: 100%; height: 120px; object-fit: cover; background: #222; }
+        .curated-info { padding: 12px; }
+        .curated-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; }
+        .curated-price { font-size: 12px; color: #4ade80; font-weight: 700; }
+
         .video-card {
             background: var(--surface); border-radius: 20px; overflow: hidden;
             margin-bottom: 40px; border: 1px solid rgba(255, 255, 255, 0.05);
@@ -87,20 +98,6 @@
 
         .video-wrapper.youtube { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-wrapper.youtube iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        .native-link-card {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 60px 20px; text-decoration: none; color: white; text-align: center;
-        }
-        .native-link-card.instagram { background: var(--ig-gradient); }
-        .native-link-card.facebook { background: var(--fb-color); }
-
-        .product-list { padding: 20px; background: rgba(0,0,0,0.15); }
-        .product-list-title { font-size: 13px; color: var(--accent); margin-bottom: 15px; font-weight: 600; text-transform: uppercase; }
-        
-        .product-item { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
-        .product-info h5 { margin: 0; font-size: 14px; }
-        .price-chip { margin-left: auto; color: #4ade80; font-weight: 700; font-size: 13px; }
 
         .action-bar { display: flex; justify-content: space-between; padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         .icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 12px; cursor: pointer; }
@@ -113,27 +110,14 @@
         <a href="index.html" class="logo">BazaarCraft</a>
         <div class="header-right">
             <select id="city-selector" class="location-dropdown" onchange="handleDropdownChange(this.value)">
-                <option value="auto">📍 Auto</option>
-                <optgroup label="Metros">
-                    <option value="delhi">Delhi</option>
-                    <option value="mumbai">Mumbai</option>
-                    <option value="bangalore">Bangalore</option>
-                    <option value="pune">Pune</option>
-                    <option value="kolkata">Kolkata</option>
-                </optgroup>
-                <optgroup label="Tier 2 & 3">
-                    <option value="jaipur">Jaipur</option>
-                    <option value="lucknow">Lucknow</option>
-                    <option value="patna">Patna</option>
-                    <option value="bhopal">Bhopal</option>
-                    <option value="indore">Indore</option>
-                    <option value="varanasi">Varanasi</option>
-                </optgroup>
+                <option value="delhi">Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="jaipur">Jaipur</option>
             </select>
             <button id="login-btn" class="login-btn" onclick="signIn()">Login</button>
             <div id="user-info" class="user-profile">
                 <img id="user-pic" class="profile-pic" src="" alt="">
-                <span id="user-name" style="font-size: 11px; cursor:pointer;" onclick="showBookmarks()">My Saves</span>
+                <span id="user-name" style="font-size: 11px; cursor:pointer;" onclick="showBookmarks()">Saves</span>
                 <button class="icon-btn" onclick="signOut()" style="color:var(--primary)">Logout</button>
             </div>
         </div>
@@ -142,18 +126,36 @@
     <div class="hero">
         <h1 class="quote">"True aesthetic is hidden in our galis."</h1>
         <div class="search-container">
-            <input type="text" id="market-search" class="search-input" placeholder="Search (Banjara, Brass, Jaipur...)" onkeypress="handleEnter(event)">
+            <input type="text" id="market-search" class="search-input" placeholder="Search markets or items..." onkeypress="handleEnter(event)">
             <button class="search-btn" onclick="executeSearch()">Search</button>
         </div>
     </div>
 
     <div class="container">
+        <h2 class="section-title">Shop Curated Decor</h2>
+        <div class="curated-grid">
+            <a href="https://amzn.to/example1" target="_blank" class="curated-card">
+                <div class="curated-img" style="display:flex;align-items:center;justify-content:center;font-size:30px">🏺</div>
+                <div class="curated-info">
+                    <span class="curated-name">Artificial Plants</span>
+                    <span class="curated-price">₹299</span>
+                </div>
+            </a>
+            <a href="https://amzn.to/example2" target="_blank" class="curated-card">
+                <div class="curated-img" style="display:flex;align-items:center;justify-content:center;font-size:30px">✨</div>
+                <div class="curated-info">
+                    <span class="curated-name">Leaf Shape Stand</span>
+                    <span class="curated-price">₹186</span>
+                </div>
+            </a>
+        </div>
+
         <h2 class="section-title">Viewing: <span id="video-city-title" style="color: var(--primary);">Trending</span></h2>
         <div id="video-feed"></div>
     </div>
 
     <script>
-        // --- FIREBASE CONFIG (REPLACE WITH YOUR KEYS) ---
+        // --- FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -170,84 +172,47 @@
         function signIn() { auth.signInWithRedirect(provider); }
         function signOut() { auth.signOut(); }
 
-        auth.getRedirectResult().then((result) => { if (result.user) console.log("Login Success"); });
-
         auth.onAuthStateChanged(user => {
             const loginBtn = document.getElementById('login-btn');
             const userInfo = document.getElementById('user-info');
             if (user) {
                 loginBtn.style.display = 'none'; userInfo.style.display = 'flex';
                 document.getElementById('user-pic').src = user.photoURL;
-                document.getElementById('user-name').innerText = user.displayName.split(" ")[0] + "'s Saves";
+                document.getElementById('user-name').innerText = user.displayName.split(" ")[0];
             } else {
                 loginBtn.style.display = 'block'; userInfo.style.display = 'none';
             }
         });
 
-        // --- FULL NATIONWIDE DICTIONARY ---
         const masterDictionary = {
-            "delhi": [
-                { id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", topFinds: [{ name: "Ceramic Vases", price: "₹150", shop: "Lane 2", img: "🏺" }] },
-                { id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat", topFinds: [{ name: "Boho Decor", price: "₹400", shop: "Stall 12", img: "✨" }] }
-            ],
-            "mumbai": [{ id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", topFinds: [{name: "Lanterns", price: "₹200", shop: "Main Lane", img: "🏮"}] }],
-            "bangalore": [{ id: "1h_wt99EhXQ", platform: "youtube", market: "Chickpet", topFinds: [{name: "Textiles", price: "₹500", shop: "BVK Iyengar Rd", img: "🧵"}] }],
-            "kolkata": [{ id: "UgPGX26Qmn4", platform: "youtube", market: "Gariahat", topFinds: [{name: "Clay Pots", price: "₹80", shop: "Market Entrance", img: "🍶"}] }],
-            "pune": [{ id: "aGl_H_gGf_o", platform: "youtube", market: "Juna Bazaar", topFinds: [{name: "Antique Decor", price: "₹300", shop: "Old Gate", img: "📻"}] }],
-            "jaipur": [{ id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", topFinds: [{ name: "Handicrafts", price: "₹300", shop: "Main Rd", img: "💍" }] }],
-            "lucknow": [{ id: "8TWLIsL6fXM", platform: "youtube", market: "Aminabad", topFinds: [{ name: "Furniture", price: "₹2000", shop: "Naka Hindola", img: "🪑" }] }],
-            "patna": [{ id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", topFinds: [{ name: "Handicrafts", price: "₹250", shop: "Bazaar Road", img: "🎨" }] }],
-            "bhopal": [{ id: "rsOPFJebPMg", platform: "youtube", market: "New Market", topFinds: [{ name: "Wall Art", price: "₹400", shop: "Art Lane", img: "🖼️" }] }],
-            "indore": [{ id: "7LyTGXM3haU", platform: "youtube", market: "MT Cloth Market", topFinds: [{ name: "Curtains", price: "₹600", shop: "Wholesale Lane", img: "🧶" }] }],
-            "varanasi": [{ id: "Rf1IHg85_TQ", platform: "youtube", market: "Harha Sarai", topFinds: [{ name: "Brassware", price: "₹400", shop: "Old City", img: "🪔" }] }]
+            "delhi": [{ id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", topFinds: [{name: "Vases", price: "₹150", img: "🏺"}] }],
+            "jaipur": [{ id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", topFinds: [{name: "Jewelry", price: "₹300", img: "💍"}] }]
         };
 
         function renderFeed(videoList) {
             const feed = document.getElementById('video-feed');
             feed.innerHTML = "";
-            const saved = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
-
-            if (!videoList || videoList.length === 0) {
-                feed.innerHTML = "<p style='text-align:center; color:var(--text-muted)'>No results found.</p>";
-                return;
-            }
-
+            if (!videoList) return;
             videoList.forEach(video => {
-                const card = document.createElement("div"); card.className = "video-card";
-                let media = "";
-                if (video.platform === "youtube") {
-                    media = `<div class="video-wrapper youtube"><iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe></div>`;
-                } else {
-                    const url = video.platform === "instagram" ? `https://www.instagram.com/reels/${video.id}/` : `https://www.facebook.com/watch/?v=${video.id}`;
-                    media = `<a href="${url}" target="_blank" class="native-link-card ${video.platform}"><div class="play-icon">▶</div><p>Watch on ${video.platform.toUpperCase()}</p></a>`;
-                }
-                let products = `<div class="product-list"><div class="product-list-title">Top Finds: ${video.market}</div>`;
-                video.topFinds.forEach(item => {
-                    products += `<div class="product-item"><span>${item.img}</span><div class="product-info"><h5>${item.name}</h5><p>${item.shop}</p></div><div class="price-chip">${item.price}</div></div>`;
-                });
-                products += `</div>`;
-                const isSaved = saved.includes(video.id);
-                const actions = `<div class="action-bar"><button class="icon-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave('${video.id}', this)">${isSaved ? '★ Saved' : '☆ Save'}</button><button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Check this! https://youtu.be/${video.id}')">📲 Share</button></div>`;
-                card.innerHTML = media + products + actions;
+                const card = document.createElement("div");
+                card.className = "video-card";
+                card.innerHTML = `
+                    <div class="video-wrapper youtube"><iframe src="https://www.youtube.com/embed/${video.id}"></iframe></div>
+                    <div class="action-bar">
+                        <button class="icon-btn" onclick="toggleSave('${video.id}', this)">☆ Save</button>
+                        <button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Check this! https://youtu.be/${video.id}')">📲 Share</button>
+                    </div>`;
                 feed.appendChild(card);
             });
         }
 
-        function toggleSave(id, btn) {
-            let saved = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
-            if (saved.includes(id)) { saved = saved.filter(i => i !== id); btn.classList.remove('saved'); btn.innerText = "☆ Save"; } 
-            else { saved.push(id); btn.classList.add('saved'); btn.innerText = "★ Saved"; }
-            localStorage.setItem('bazaarSavesV8', JSON.stringify(saved));
+        function executeSearch() {
+            const term = document.getElementById('market-search').value.toLowerCase().trim();
+            renderFeed(masterDictionary[term] || []);
         }
 
-        function handleDropdownChange(val) { document.getElementById('video-city-title').innerText = val.toUpperCase(); renderFeed(masterDictionary[val]); }
-        function executeSearch() { const term = document.getElementById('market-search').value.toLowerCase().trim(); renderFeed(masterDictionary[term] || []); }
         function handleEnter(e) { if (e.key === "Enter") executeSearch(); }
-        function showBookmarks() {
-            const savedIds = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
-            const all = Object.values(masterDictionary).flat();
-            renderFeed(all.filter(v => savedIds.includes(v.id)));
-        }
+        function handleDropdownChange(val) { renderFeed(masterDictionary[val]); }
 
         window.onload = () => renderFeed(masterDictionary["delhi"]);
     </script>
