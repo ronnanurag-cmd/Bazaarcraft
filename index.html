@@ -113,11 +113,22 @@
         <a href="index.html" class="logo">BazaarCraft</a>
         <div class="header-right">
             <select id="city-selector" class="location-dropdown" onchange="handleDropdownChange(this.value)">
-                <option value="delhi">Delhi</option>
-                <option value="mumbai">Mumbai</option>
-                <option value="jaipur">Jaipur</option>
-                <option value="lucknow">Lucknow</option>
-                <option value="patna">Patna</option>
+                <option value="auto">📍 Auto</option>
+                <optgroup label="Metros">
+                    <option value="delhi">Delhi</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="pune">Pune</option>
+                    <option value="kolkata">Kolkata</option>
+                </optgroup>
+                <optgroup label="Tier 2 & 3">
+                    <option value="jaipur">Jaipur</option>
+                    <option value="lucknow">Lucknow</option>
+                    <option value="patna">Patna</option>
+                    <option value="bhopal">Bhopal</option>
+                    <option value="indore">Indore</option>
+                    <option value="varanasi">Varanasi</option>
+                </optgroup>
             </select>
             <button id="login-btn" class="login-btn" onclick="signIn()">Login</button>
             <div id="user-info" class="user-profile">
@@ -131,7 +142,7 @@
     <div class="hero">
         <h1 class="quote">"True aesthetic is hidden in our galis."</h1>
         <div class="search-container">
-            <input type="text" id="market-search" class="search-input" placeholder="Search (Banjara, Brass, Furniture...)" onkeypress="handleEnter(event)">
+            <input type="text" id="market-search" class="search-input" placeholder="Search (Banjara, Brass, Jaipur...)" onkeypress="handleEnter(event)">
             <button class="search-btn" onclick="executeSearch()">Search</button>
         </div>
     </div>
@@ -142,7 +153,7 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE CONFIG ---
+        // --- FIREBASE CONFIG (REPLACE WITH YOUR KEYS) ---
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -173,31 +184,28 @@
             }
         });
 
-        // --- 2. DATA ---
+        // --- FULL NATIONWIDE DICTIONARY ---
         const masterDictionary = {
             "delhi": [
-                {
-                    id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market",
-                    topFinds: [{ name: "Ceramic Vases", price: "₹150", shop: "Lane 2", img: "🏺" }]
-                },
-                {
-                    id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat",
-                    topFinds: [{ name: "Boho Decor", price: "₹400", shop: "Stall 12", img: "✨" }]
-                }
+                { id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", topFinds: [{ name: "Ceramic Vases", price: "₹150", shop: "Lane 2", img: "🏺" }] },
+                { id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat", topFinds: [{ name: "Boho Decor", price: "₹400", shop: "Stall 12", img: "✨" }] }
             ],
-            "jaipur": [
-                {
-                    id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar",
-                    topFinds: [{ name: "Silver Jewelry", price: "₹300+", shop: "Street Vendors", img: "💍" }]
-                }
-            ]
+            "mumbai": [{ id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", topFinds: [{name: "Lanterns", price: "₹200", shop: "Main Lane", img: "🏮"}] }],
+            "bangalore": [{ id: "1h_wt99EhXQ", platform: "youtube", market: "Chickpet", topFinds: [{name: "Textiles", price: "₹500", shop: "BVK Iyengar Rd", img: "🧵"}] }],
+            "kolkata": [{ id: "UgPGX26Qmn4", platform: "youtube", market: "Gariahat", topFinds: [{name: "Clay Pots", price: "₹80", shop: "Market Entrance", img: "🍶"}] }],
+            "pune": [{ id: "aGl_H_gGf_o", platform: "youtube", market: "Juna Bazaar", topFinds: [{name: "Antique Decor", price: "₹300", shop: "Old Gate", img: "📻"}] }],
+            "jaipur": [{ id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", topFinds: [{ name: "Handicrafts", price: "₹300", shop: "Main Rd", img: "💍" }] }],
+            "lucknow": [{ id: "8TWLIsL6fXM", platform: "youtube", market: "Aminabad", topFinds: [{ name: "Furniture", price: "₹2000", shop: "Naka Hindola", img: "🪑" }] }],
+            "patna": [{ id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", topFinds: [{ name: "Handicrafts", price: "₹250", shop: "Bazaar Road", img: "🎨" }] }],
+            "bhopal": [{ id: "rsOPFJebPMg", platform: "youtube", market: "New Market", topFinds: [{ name: "Wall Art", price: "₹400", shop: "Art Lane", img: "🖼️" }] }],
+            "indore": [{ id: "7LyTGXM3haU", platform: "youtube", market: "MT Cloth Market", topFinds: [{ name: "Curtains", price: "₹600", shop: "Wholesale Lane", img: "🧶" }] }],
+            "varanasi": [{ id: "Rf1IHg85_TQ", platform: "youtube", market: "Harha Sarai", topFinds: [{ name: "Brassware", price: "₹400", shop: "Old City", img: "🪔" }] }]
         };
 
-        // --- 3. APP LOGIC ---
         function renderFeed(videoList) {
             const feed = document.getElementById('video-feed');
             feed.innerHTML = "";
-            const saved = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+            const saved = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
 
             if (!videoList || videoList.length === 0) {
                 feed.innerHTML = "<p style='text-align:center; color:var(--text-muted)'>No results found.</p>";
@@ -206,7 +214,6 @@
 
             videoList.forEach(video => {
                 const card = document.createElement("div"); card.className = "video-card";
-                
                 let media = "";
                 if (video.platform === "youtube") {
                     media = `<div class="video-wrapper youtube"><iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe></div>`;
@@ -214,33 +221,30 @@
                     const url = video.platform === "instagram" ? `https://www.instagram.com/reels/${video.id}/` : `https://www.facebook.com/watch/?v=${video.id}`;
                     media = `<a href="${url}" target="_blank" class="native-link-card ${video.platform}"><div class="play-icon">▶</div><p>Watch on ${video.platform.toUpperCase()}</p></a>`;
                 }
-
                 let products = `<div class="product-list"><div class="product-list-title">Top Finds: ${video.market}</div>`;
                 video.topFinds.forEach(item => {
                     products += `<div class="product-item"><span>${item.img}</span><div class="product-info"><h5>${item.name}</h5><p>${item.shop}</p></div><div class="price-chip">${item.price}</div></div>`;
                 });
                 products += `</div>`;
-
                 const isSaved = saved.includes(video.id);
-                const actions = `<div class="action-bar"><button class="icon-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave('${video.id}', this)">${isSaved ? '★ Saved' : '☆ Save'}</button><button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Look! https://youtu.be/${video.id}')">📲 Share</button></div>`;
-
+                const actions = `<div class="action-bar"><button class="icon-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave('${video.id}', this)">${isSaved ? '★ Saved' : '☆ Save'}</button><button class="icon-btn" onclick="window.open('https://api.whatsapp.com/send?text=Check this! https://youtu.be/${video.id}')">📲 Share</button></div>`;
                 card.innerHTML = media + products + actions;
                 feed.appendChild(card);
             });
         }
 
         function toggleSave(id, btn) {
-            let saved = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+            let saved = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
             if (saved.includes(id)) { saved = saved.filter(i => i !== id); btn.classList.remove('saved'); btn.innerText = "☆ Save"; } 
             else { saved.push(id); btn.classList.add('saved'); btn.innerText = "★ Saved"; }
-            localStorage.setItem('bazaarSavesV7', JSON.stringify(saved));
+            localStorage.setItem('bazaarSavesV8', JSON.stringify(saved));
         }
 
         function handleDropdownChange(val) { document.getElementById('video-city-title').innerText = val.toUpperCase(); renderFeed(masterDictionary[val]); }
         function executeSearch() { const term = document.getElementById('market-search').value.toLowerCase().trim(); renderFeed(masterDictionary[term] || []); }
         function handleEnter(e) { if (e.key === "Enter") executeSearch(); }
         function showBookmarks() {
-            const savedIds = JSON.parse(localStorage.getItem('bazaarSavesV7') || "[]");
+            const savedIds = JSON.parse(localStorage.getItem('bazaarSavesV8') || "[]");
             const all = Object.values(masterDictionary).flat();
             renderFeed(all.filter(v => savedIds.includes(v.id)));
         }
