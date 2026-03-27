@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BazaarCraft | Ultimate Navigation Hub</title>
+    <title>BazaarCraft | The Ultimate Market Navigator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Poppins:wght@300;400;600&display=swap');
-        :root { --primary: #FF7B00; --bg: #050507; --surface: #121217; --border: rgba(255, 255, 255, 0.1); --uber: #000000; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; min-height: 100vh; }
+        :root { --primary: #FF7B00; --bg: #050507; --border: rgba(255, 255, 255, 0.1); --uber: #000000; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
         
         header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5,5,7,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
         .logo { font-family: 'Syncopate', sans-serif; font-size: 16px; color: var(--primary); text-decoration: none; }
         .city-picker { background: #1A1A24; color: white; border: 2px solid var(--primary); padding: 8px 12px; border-radius: 12px; font-weight: 700; outline: none; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 15px 120px; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 25px; }
-
-        .market-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 28px; padding: 20px; }
+        .market-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 28px; padding: 20px; transition: 0.3s; }
         
-        /* Navigation Tabs */
+        /* Nav Tabs */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: white; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .tab-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: white; font-size: 10px; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; }
         .tab-btn.maps { border-color: #4285F4; color: #4285F4; }
-        .tab-btn.uber { background: var(--uber); border-color: #333; color: white; }
+        .tab-btn.uber { background: var(--uber); border-color: #333; }
 
         .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .item-card { background: rgba(255,255,255,0.02); border-radius: 18px; padding: 8px; text-align: center; }
+        .item-card { background: rgba(255,255,255,0.02); border-radius: 18px; padding: 8px; text-align: center; cursor: pointer; }
         .thumb-img { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; }
 
         .gali-guide { font-size: 11px; color: #4ade80; border: 1px dashed rgba(74, 222, 128, 0.3); padding: 12px; border-radius: 12px; margin-bottom: 15px; background: rgba(74,222,128,0.02); }
         .watch-btn { width: 100%; padding: 12px; border-radius: 15px; border: none; background: white; color: black; font-weight: 700; cursor: pointer; }
         .video-box { display: none; margin-top: 15px; border-radius: 15px; overflow: hidden; }
 
-        .budget-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #1A1A24; padding: 15px 35px; border-radius: 50px; border: 1px solid var(--primary); display: flex; align-items: center; gap: 40px; z-index: 2000; }
+        .budget-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #1A1A24; padding: 15px 35px; border-radius: 50px; border: 1px solid var(--primary); display: flex; align-items: center; gap: 40px; z-index: 2000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
     </style>
 </head>
 <body>
@@ -63,52 +62,53 @@
         let wallet = 0;
         const masterDB = {
             "delhi": [
-                { id: "gVVK5Q6-OG0", m: "Banjara Market", lat: "28.4132", lng: "77.1000", items: [{n: "Mirrors", p: 800}, {n: "Vases", p: 150}], nav: "Exit Sector 54 Metro. Rickshaw to 'Gaushala Road'." },
-                { id: "tOVVnRnoml0", m: "Chawri Bazaar", lat: "28.6496", lng: "77.2274", items: [{n: "Antique Decor", p: 1200}], nav: "Exit Chawri Bazaar Metro. Lane near Standard Sweets." }
-            ],
-            "mumbai": [
-                { id: "2x-2aqYnjTk", m: "Crawford Market", lat: "18.9472", lng: "72.8340", items: [{n: "Lamps", p: 400}], nav: "Lane behind Mahatma Phule Mandai." }
+                { id: "gVVK5Q6-OG0", m: "Banjara Market", lat: "28.4132", lng: "77.1000", items: [{n: "Mirrors", p: 800}, {n: "Ceramics", p: 200}], nav: "Exit Sec 54 Metro. Rickshaw to Gaushala Road." },
+                { id: "tOVVnRnoml0", m: "Chawri Bazaar", lat: "28.6496", lng: "77.2274", items: [{n: "Antique Decor", p: 1200}], nav: "Exit Chawri Metro. Lane near Standard Sweets." },
+                { id: "p0Zf6f-6u6o", m: "Sarojini Nagar", lat: "28.5771", lng: "77.1982", items: [{n: "Export Wear", p: 150}], nav: "Exit Sarojini Metro Gate 2." },
+                { id: "wpPnBZOggAE", m: "Lajpat Nagar", lat: "28.5677", lng: "77.2432", items: [{n: "Fabrics", p: 250}], nav: "Central Market Gate 1 entrance." }
             ],
             "kolkata": [
-                { id: "vxqcwUGuTIU", m: "Gariahat Market", lat: "22.5186", lng: "88.3664", items: [{n: "Saree", p: 900}], nav: "Stalls near Gariahat Flyover." }
+                { id: "vxqcwUGuTIU", m: "Gariahat Saree Hub", lat: "22.5186", lng: "88.3664", items: [{n: "Tant Saree", p: 900}], nav: "Stalls near Gariahat Flyover." },
+                { id: "2BGTKmSmdgU", m: "New Market", lat: "22.5600", lng: "88.3519", items: [{n: "Leather", p: 400}], nav: "Hogg Market, near Simpark Mall." },
+                { id: "kcjqDg0hmRE", m: "Galiff Street", lat: "22.6019", lng: "88.3712", items: [{n: "Plants", p: 100}], nav: "Sunday Morning only, Shyambazar." }
             ],
             "jaipur": [
-                { id: "_Ut-aGpCVaU", m: "Bapu Bazar", lat: "26.9189", lng: "75.8236", items: [{n: "Mojaris", p: 350}], nav: "Enter Sanganeri Gate. First left 'Kucha'." }
+                { id: "_Ut-aGpCVaU", m: "Bapu Bazar", lat: "26.9189", lng: "75.8236", items: [{n: "Mojaris", p: 350}], nav: "Sanganeri Gate entrance left kucha." },
+                { id: "kCdTLhyzl8A", m: "Johari Bazaar", lat: "26.9205", lng: "75.8268", items: [{n: "Jewelry", p: 1000}], nav: "Jewelry lanes near Hawa Mahal." }
             ],
             "varanasi": [
-                { id: "nVAeSFIGgAE", m: "Thatheri Bazaar", lat: "25.3117", lng: "82.9996", items: [{n: "Brass Kalash", p: 450}], nav: "Ask for 'Thatheri Gali' near Chowk silver shops." }
+                { id: "nVAeSFIGgAE", m: "Thatheri Bazaar", lat: "25.3117", lng: "82.9996", items: [{n: "Brassware", p: 500}], nav: "Ask for Thatheri Gali near Chowk." },
+                { id: "Rf1IHg85_TQ", m: "Vishwanath Galli", lat: "25.3109", lng: "83.0105", items: [{n: "Wooden Toys", p: 150}], nav: "Lanes leading to Kashi Vishwanath." }
             ],
-            "lucknow": [{ id: "V_jYSLeCxQ4", m: "Aminabad", lat: "26.8457", lng: "80.9272", items: [{n: "Chikan Kurti", p: 700}], nav: "Pratap Market for high quality." }],
-            "patna": [{ id: "tp10ZagNXfA", m: "Maurya Lok", lat: "25.6122", lng: "85.1314", items: [{n: "Handicrafts", p: 250}], nav: "Stalls near Patna Museum entrance." }],
-            "bhopal": [{ id: "C6Nv6hl34SE", m: "New Market", lat: "23.2311", lng: "77.3996", items: [{n: "Bead Bag", p: 300}], nav: "Gate No. 2 area inner lanes." }],
-            "indore": [{ id: "9N--Md7hu0Q", m: "MT Market", lat: "22.7164", lng: "75.8542", items: [{n: "Curtains", p: 600}], nav: "Near Kanch Ka Mandir lanes." }],
-            "pune": [{ id: "1g3nGOsMH0A", m: "Juna Bazaar", lat: "18.5284", lng: "73.8569", items: [{n: "Antiques", p: 400}], nav: "Footpath stalls near Kesba Peth." }],
-            "bangalore": [{ id: "Tv3gGVG2F38", m: "Chickpet", lat: "12.9698", lng: "77.5772", items: [{n: "Silk", p: 1200}], nav: "Walking tour near police station." }]
+            "mumbai": [{ id: "2x-2aqYnjTk", m: "Crawford", lat: "18.9472", lng: "72.8340", items: [{n: "Lamps", p: 400}], nav: "Behind Mahatma Phule Mandai." }],
+            "lucknow": [{ id: "V_jYSLeCxQ4", m: "Aminabad", lat: "26.8457", lng: "80.9272", items: [{n: "Chikan Kurti", p: 700}], nav: "Pratap Market central hub." }],
+            "patna": [{ id: "tp10ZagNXfA", m: "Maurya Lok", lat: "25.6122", lng: "85.1314", items: [{n: "Handicrafts", p: 250}], nav: "Backside of Patna Museum." }],
+            "bhopal": [{ id: "C6Nv6hl34SE", m: "New Market", lat: "23.2311", lng: "77.3996", items: [{n: "Bead Bag", p: 300}], nav: "Inner jewelry lanes." }],
+            "indore": [{ id: "9N--Md7hu0Q", m: "MT Market", lat: "22.7164", lng: "75.8542", items: [{n: "Fabric", p: 400}], nav: "Near clock tower lanes." }],
+            "pune": [{ id: "1g3nGOsMH0A", m: "Juna Bazaar", lat: "18.5284", lng: "73.8569", items: [{n: "Antiques", p: 400}], nav: "Footpath stalls near Kesba." }],
+            "bangalore": [{ id: "Tv3gGVG2F38", m: "Chickpet", lat: "12.9698", lng: "77.5772", items: [{n: "Silk", p: 1500}], nav: "Near old city police station." }]
         };
 
         function render(list) {
             const feed = document.getElementById('feed'); feed.innerHTML = "";
             list.forEach(v => {
                 const card = document.createElement('div'); card.className = 'market-card';
-                const uberLink = `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${v.lat}&dropoff[longitude]=${v.lng}&dropoff[nickname]=${encodeURIComponent(v.m)}`;
-                const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}`;
-                
+                const uber = `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${v.lat}&dropoff[longitude]=${v.lng}&dropoff[nickname]=${encodeURIComponent(v.m)}`;
+                const maps = `https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}`;
                 card.innerHTML = `
                     <div style="font-size:10px; color:var(--primary); font-weight:700; margin-bottom:12px;">${v.m.toUpperCase()}</div>
                     <div class="nav-tabs">
-                        <a href="${mapsLink}" target="_blank" class="tab-btn maps">📍 GOOGLE MAPS</a>
-                        <a href="${uberLink}" target="_blank" class="tab-btn uber">🚗 BOOK UBER</a>
+                        <a href="${maps}" target="_blank" class="tab-btn maps">📍 GOOGLE MAPS</a>
+                        <a href="${uber}" target="_blank" class="tab-btn uber">🚗 BOOK UBER</a>
                     </div>
                     <div class="catalog-grid">
-                        ${v.items.map(i => `
-                            <div class="item-card" onclick="add(${i.p})">
-                                <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="thumb-img">
-                                <div style="font-size:11px;">${i.n} <span style="color:#4ade80; font-weight:700;">₹${i.p}</span></div>
-                            </div>
-                        `).join('')}
+                        ${v.items.map(i => `<div class="item-card" onclick="add(${i.p})">
+                            <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="thumb-img">
+                            <div style="font-size:11px;">${i.n} <span style="color:#4ade80; font-weight:700;">₹${i.p}</span></div>
+                        </div>`).join('')}
                     </div>
                     <div class="gali-guide"><strong>GALI GUIDE:</strong> ${v.nav}</div>
-                    <button class="watch-btn" onclick="toggle('${v.id}')">WATCH VIDEO PROOF</button>
+                    <button class="watch-btn" onclick="toggle('${v.id}')">WATCH TOUR</button>
                     <div id="${v.id}" class="video-box">
                         <div style="position:relative; padding-bottom:56.25%; height:0;"><iframe src="https://www.youtube.com/embed/${v.id}" style="position:absolute; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>
                     </div>
