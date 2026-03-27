@@ -14,42 +14,33 @@
             --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
         }
         body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-base); color: var(--text-main); -webkit-font-smoothing: antialiased; }
-        
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px; background: rgba(11, 11, 15, 0.9); backdrop-filter: blur(15px);
             position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo { font-size: 20px; font-weight: 700; background: linear-gradient(45deg, #FF7B00, #FFB703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        
         .header-right { display: flex; align-items: center; gap: 10px; }
         select.location-dropdown { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 5px; border-radius: 10px; font-size: 11px; outline: none; }
         .login-btn { background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
         .user-profile { display: none; align-items: center; gap: 8px; }
         .profile-pic { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--primary); }
-
         .hero { text-align: center; padding: 40px 20px; background: radial-gradient(circle at top, rgba(255, 123, 0, 0.1) 0%, transparent 70%); }
         .search-container { display: flex; max-width: 450px; margin: 0 auto; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; padding: 4px; }
         .search-input { flex: 1; background: transparent; border: none; padding: 8px 15px; color: white; outline: none; }
         .search-btn { background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-
         .container { max-width: 550px; margin: 0 auto; padding: 20px 15px 60px; }
         .section-title { font-size: 1.2rem; margin: 20px 0; border-left: 4px solid var(--primary); padding-left: 12px; }
-
         .decor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
         .decor-card { background: var(--surface); border-radius: 12px; padding: 10px; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.05); }
-
         .video-card { background: var(--surface); border-radius: 16px; overflow: hidden; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
         .native-link-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-decoration: none; color: white; }
         .instagram-card { background: var(--ig-gradient); }
-
         .product-list { padding: 15px; background: rgba(0,0,0,0.2); }
         .product-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
         .price-tag { margin-left: auto; color: #4ade80; font-weight: 700; }
-        
         .action-bar { display: flex; justify-content: space-between; padding: 10px 15px; border-top: 1px solid rgba(255,255,255,0.05); }
         .icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; }
     </style>
@@ -64,10 +55,12 @@
                 <option value="mumbai">Mumbai</option>
                 <option value="bangalore">Bangalore</option>
                 <option value="pune">Pune</option>
+                <option value="kolkata">Kolkata</option>
                 <option value="jaipur">Jaipur</option>
                 <option value="lucknow">Lucknow</option>
                 <option value="patna">Patna</option>
                 <option value="bhopal">Bhopal</option>
+                <option value="indore">Indore</option>
                 <option value="varanasi">Varanasi</option>
             </select>
             <button id="login-btn" class="login-btn" onclick="signIn()">Login</button>
@@ -79,7 +72,7 @@
     </header>
 
     <div class="hero">
-        <h1 style="font-size:1.4rem; font-style:italic; color:var(--accent)">"India's hidden aesthetic, mapped for you."</h1>
+        <h1 style="font-size:1.4rem; font-style:italic; color:var(--accent)">"India's finest aesthetic, found in your galis."</h1>
         <div class="search-container">
             <input type="text" id="market-search" class="search-input" placeholder="Search Delhi, Jaipur, Brass..." onkeypress="handleEnter(event)">
             <button class="search-btn" onclick="executeSearch()">Go</button>
@@ -92,18 +85,15 @@
             <a href="https://amazon.in" target="_blank" class="decor-card"><div>🏺</div><div style="font-size:11px">Ceramic Vase</div><span style="color:#4ade80; font-size:12px;">₹299</span></a>
             <a href="https://amazon.in" target="_blank" class="decor-card"><div>🌳</div><div style="font-size:11px">Brass Tree</div><span style="color:#4ade80; font-size:12px;">₹1398</span></a>
         </div>
-
-        <h2 class="section-title">Market Tours: <span id="city-title" style="color:var(--primary)">Delhi</span></h2>
+        <h2 class="section-title">Market Tours: <span id="city-title" style="color:var(--primary)">DELHI</span></h2>
         <div id="video-feed"></div>
     </div>
 
     <script>
-        // --- FIREBASE CONFIG (ADD YOURS HERE) ---
         const firebaseConfig = { apiKey: "YOUR_KEY", authDomain: "YOUR_DOMAIN", projectId: "YOUR_ID", appId: "YOUR_APP" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
-
         function signIn() { auth.signInWithRedirect(provider); }
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -114,78 +104,42 @@
             }
         });
 
-        // --- THE COMPLETE NATIONWIDE DATABASE ---
         const masterDictionary = {
             "delhi": [
                 { id: "oxdjZ8nSDOs", platform: "youtube", market: "Banjara Market", finds: [{n: "Ceramics", p: "₹150"}] },
                 { id: "CwhA2uJovXg", platform: "instagram", market: "Dilli Haat", finds: [{n: "Mirrors", p: "₹800"}] },
-                { id: "wpPnBZOggAE", platform: "youtube", market: "Lajpat Nagar", finds: [{n: "Fabrics", p: "₹200"}] },
-                { id: "p0Zf6f-6u6o", platform: "youtube", market: "Sarojini Nagar", finds: [{n: "Clothing", p: "₹100"}] }
+                { id: "wpPnBZOggAE", platform: "youtube", market: "Lajpat Nagar", finds: [{n: "Fabrics", p: "₹200"}] }
             ],
-            "mumbai": [
-                { id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", finds: [{n: "Lanterns", p: "₹200"}] },
-                { id: "vDAtD6iE1Xo", platform: "youtube", market: "Colaba Causeway", finds: [{n: "Jewelry", p: "₹150"}] },
-                { id: "X7N3v29u678", platform: "youtube", market: "Chor Bazaar", finds: [{n: "Antiques", p: "₹500"}] }
-            ],
-            "jaipur": [
-                { id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", finds: [{n: "Blue Pottery", p: "₹450"}] },
-                { id: "yF9vU7_78m0", platform: "youtube", market: "Bapu Bazaar", finds: [{n: "Mojaris", p: "₹350"}] }
-            ],
-            "lucknow": [
-                { id: "8TWLIsL6fXM", platform: "youtube", market: "Aminabad", finds: [{n: "Chikan Kurti", p: "₹600"}] },
-                { id: "H7v9U6_Lko1", platform: "youtube", market: "Chowk Market", finds: [{n: "Itar/Perfume", p: "₹250"}] }
-            ],
-            "patna": [
-                { id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", finds: [{n: "Handicrafts", p: "₹250"}] },
-                { id: "P9nB6v_Ptn1", platform: "youtube", market: "Boring Road", finds: [{n: "Boutiques", p: "₹500"}] }
-            ],
-            "bhopal": [
-                { id: "rsOPFJebPMg", platform: "youtube", market: "New Market", finds: [{n: "Bead Work", p: "₹200"}] },
-                { id: "B9nB7v_Bhp2", platform: "youtube", market: "Chowk Bazaar", finds: [{n: "Zardosi", p: "₹800"}] }
-            ],
-            "varanasi": [
-                { id: "Rf1IHg85_TQ", platform: "youtube", market: "Thatheri Bazaar", finds: [{n: "Brassware", p: "₹500"}] },
-                { id: "V9nB8v_Vns3", platform: "youtube", market: "Vishwanath Galli", finds: [{n: "Wooden Toys", p: "₹150"}] }
-            ],
-            "bangalore": [
-                { id: "1h_wt99EhXQ", platform: "youtube", market: "Chickpet", finds: [{n: "Silk Sarees", p: "₹1200"}] },
-                { id: "B9nB9v_Blr4", platform: "youtube", market: "Commercial Street", finds: [{n: "Decor", p: "₹300"}] }
-            ],
-            "pune": [
-                { id: "aGl_H_gGf_o", platform: "youtube", market: "Juna Bazaar", finds: [{n: "Antiques", p: "₹400"}] },
-                { id: "P9nB0v_Pun5", platform: "youtube", market: "Tulsi Baug", finds: [{n: "Copperware", p: "₹600"}] }
-            ]
+            "mumbai": [{ id: "WbY2l_VOigo", platform: "youtube", market: "Crawford Market", finds: [{n: "Lanterns", p: "₹200"}] }],
+            "bangalore": [{ id: "1h_wt99EhXQ", platform: "youtube", market: "Chickpet", finds: [{n: "Silk", p: "₹1200"}] }],
+            "jaipur": [{ id: "nE5C9KvIqRQ", platform: "youtube", market: "Johari Bazaar", finds: [{n: "Blue Pottery", p: "₹450"}] }],
+            "lucknow": [{ id: "8TWLIsL6fXM", platform: "youtube", market: "Aminabad", finds: [{n: "Chikan Work", p: "₹800"}] }],
+            "patna": [{ id: "RDfb3o5o6Sc", platform: "youtube", market: "Maurya Lok", finds: [{n: "Handicrafts", p: "₹250"}] }],
+            "bhopal": [{ id: "rsOPFJebPMg", platform: "youtube", market: "New Market", finds: [{n: "Zardosi", p: "₹500"}] }],
+            "varanasi": [{ id: "Rf1IHg85_TQ", platform: "youtube", market: "Thatheri Bazaar", finds: [{n: "Brassware", p: "₹500"}] }],
+            "pune": [{ id: "aGl_H_gGf_o", platform: "youtube", market: "Juna Bazaar", finds: [{n: "Antiques", p: "₹400"}] }],
+            "kolkata": [{ id: "UgPGX26Qmn4", platform: "youtube", market: "Gariahat", finds: [{n: "Clay Pots", p: "₹80"}] }],
+            "indore": [{ id: "7LyTGXM3haU", platform: "youtube", market: "MT Cloth Market", finds: [{n: "Curtains", p: "₹600"}] }]
         };
 
         function renderFeed(list) {
             const feed = document.getElementById('video-feed'); feed.innerHTML = "";
-            if (!list || list.length === 0) { feed.innerHTML = "<p style='text-align:center;'>No results. Try another city!</p>"; return; }
+            if (!list || list.length === 0) { feed.innerHTML = "<p>No results.</p>"; return; }
             list.forEach(v => {
                 const card = document.createElement("div"); card.className = "video-card";
                 let media = `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${v.id}"></iframe></div>`;
-                if(v.platform === "instagram") {
-                    media = `<a href="https://instagram.com/reels/${v.id}" target="_blank" class="native-link-card instagram-card"><div>▶</div><p style="font-size:11px;font-weight:700;">WATCH ON INSTAGRAM</p></a>`;
-                }
-                card.innerHTML = media + `<div class="product-list"><div style="font-size:10px; color:var(--accent); margin-bottom:8px">MAPPED AT ${v.market.toUpperCase()}</div>` + 
-                    v.finds.map(f => `<div class="product-item">✨ ${f.n} <span class="price-tag">${f.p}</span></div>`).join("") + 
-                    `</div><div class="action-bar"><button class="icon-btn">☆ Save</button><button class="icon-btn" onclick="window.open('https://wa.me/?text=Check this! https://youtu.be/${v.id}')">📲 Share</button></div>`;
+                if(v.platform === "instagram") media = `<a href="https://instagram.com/reels/${v.id}" target="_blank" class="native-link-card instagram-card"><div>▶</div><p style="font-size:11px">WATCH REEL</p></a>`;
+                card.innerHTML = media + `<div class="product-list">` + v.finds.map(f => `<div class="product-item">✨ ${f.n} <span class="price-tag">${f.p}</span></div>`).join("") + `</div><div class="action-bar"><button class="icon-btn">☆ Save</button><button class="icon-btn" onclick="window.open('https://wa.me/?text=Check this! https://youtu.be/${v.id}')">📲 Share</button></div>`;
                 feed.appendChild(card);
             });
         }
-
-        function handleDropdownChange(val) { document.getElementById('city-title').innerText = val.toUpperCase(); renderFeed(masterDictionary[val]); }
-        
+        function handleDropdownChange(v) { document.getElementById('city-title').innerText = v.toUpperCase(); renderFeed(masterDictionary[v]); }
         function executeSearch() {
-            const term = document.getElementById('market-search').value.toLowerCase().trim();
-            if (!term) return;
-            let results = [];
-            for (const key in masterDictionary) {
-                if (key.includes(term) || term.includes(key)) { results = results.concat(masterDictionary[key]); }
-            }
-            document.getElementById('city-title').innerText = term.toUpperCase();
-            renderFeed(results);
+            const t = document.getElementById('market-search').value.toLowerCase().trim();
+            let res = [];
+            for (const k in masterDictionary) { if (k.includes(t)) res = res.concat(masterDictionary[k]); }
+            document.getElementById('city-title').innerText = t.toUpperCase(); renderFeed(res);
         }
-
         function handleEnter(e) { if(e.key === "Enter") executeSearch(); }
         window.onload = () => renderFeed(masterDictionary["delhi"]);
     </script>
