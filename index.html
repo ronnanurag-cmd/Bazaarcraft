@@ -67,7 +67,7 @@ gap:10px;
 
 .item-card {
 background:#1a1a1a;padding:10px;border-radius:12px;
-cursor:pointer;
+display:flex;justify-content:space-between;align-items:center;
 }
 
 .video-box {display:none;margin-top:10px;}
@@ -88,7 +88,6 @@ position:fixed;right:10px;top:80px;
 background:#111;padding:10px;border-radius:15px;
 max-width:200px;
 }
-
 </style>
 </head>
 
@@ -140,19 +139,46 @@ let currentData=[];
 
 const masterDB = {
 "delhi":[
-{id:"gVVK5Q6-OG0",m:"Banjara Market",lat:"28.41",lng:"77.10",
-items:[{n:"Mirror",p:800},{n:"Ceramics",p:200}],
-nav:"Gaushala Road",vendor:"Raju Decor",phone:"919999999999"}
+{id:"gVVK5Q6-OG0",m:"Banjara Market",lat:"28.4132",lng:"77.1000",items:[{n:"Mirrors",p:800},{n:"Ceramics",p:200}],nav:"Sec 54 Metro → Gaushala Road",vendor:"Raju Decor",phone:"919999999999"},
+{id:"tOVVnRnoml0",m:"Chawri Bazaar",lat:"28.6496",lng:"77.2274",items:[{n:"Antique Decor",p:1200}],nav:"Near Standard Sweets",vendor:"Old Delhi Arts",phone:"919888888888"},
+{id:"p0Zf6f-6u6o",m:"Sarojini Nagar",lat:"28.5771",lng:"77.1982",items:[{n:"Export Wear",p:150}],nav:"Gate 2",vendor:"Fashion Hub",phone:"917777777777"},
+{id:"wpPnBZOggAE",m:"Lajpat Nagar",lat:"28.5677",lng:"77.2432",items:[{n:"Fabrics",p:250}],nav:"Central Market Gate 1",vendor:"Fabric World",phone:"916666666666"}
 ],
 "mumbai":[
-{id:"2x-2aqYnjTk",m:"Crawford Market",lat:"18.94",lng:"72.83",
-items:[{n:"Lamps",p:400}],
-nav:"Behind Mandai",vendor:"A1 Lights",phone:"918888888888"}
+{id:"2x-2aqYnjTk",m:"Crawford Market",lat:"18.9472",lng:"72.8340",items:[{n:"Lamps",p:400}],nav:"Behind Mandai",vendor:"A1 Lights",phone:"918888888888"},
+{id:"k0HhWjGd9XQ",m:"Chor Bazaar",lat:"18.9619",lng:"72.8310",items:[{n:"Vintage Items",p:1000}],nav:"Mutton Street",vendor:"Vintage Hub",phone:"917777777777"},
+{id:"Jz0uYHj2W6s",m:"Hill Road Market",lat:"19.0550",lng:"72.8260",items:[{n:"Street Fashion",p:300}],nav:"Bandra Police Station",vendor:"Bandra Trends",phone:"916666666666"}
 ],
 "kolkata":[
-{id:"vxqcwUGuTIU",m:"Gariahat",lat:"22.51",lng:"88.36",
-items:[{n:"Saree",p:900}],
-nav:"Near Flyover",vendor:"Bengal Crafts",phone:"917777777777"}
+{id:"vxqcwUGuTIU",m:"Gariahat Market",lat:"22.5186",lng:"88.3664",items:[{n:"Tant Saree",p:900}],nav:"Near Flyover",vendor:"Bengal Crafts",phone:"917777777777"},
+{id:"2BGTKmSmdgU",m:"New Market",lat:"22.5600",lng:"88.3519",items:[{n:"Leather Goods",p:400}],nav:"Hogg Market",vendor:"Leather Hub",phone:"916666666666"},
+{id:"kcjqDg0hmRE",m:"Galiff Street",lat:"22.6019",lng:"88.3712",items:[{n:"Plants",p:100}],nav:"Sunday only",vendor:"Green Kolkata",phone:"915555555555"}
+],
+"jaipur":[
+{id:"_Ut-aGpCVaU",m:"Bapu Bazar",lat:"26.9189",lng:"75.8236",items:[{n:"Mojaris",p:350}],nav:"Sanganeri Gate",vendor:"Rajasthan Crafts",phone:"914444444444"},
+{id:"kCdTLhyzl8A",m:"Johari Bazaar",lat:"26.9205",lng:"75.8268",items:[{n:"Jewelry",p:1000}],nav:"Near Hawa Mahal",vendor:"Gem Palace",phone:"913333333333"}
+],
+"varanasi":[
+{id:"nVAeSFIGgAE",m:"Thatheri Bazaar",lat:"25.3117",lng:"82.9996",items:[{n:"Brassware",p:500}],nav:"Near Chowk",vendor:"Kashi Brass",phone:"912222222222"},
+{id:"Rf1IHg85_TQ",m:"Vishwanath Galli",lat:"25.3109",lng:"83.0105",items:[{n:"Wooden Toys",p:150}],nav:"Temple lanes",vendor:"Temple Crafts",phone:"911111111111"}
+],
+"lucknow":[
+{id:"V_jYSLeCxQ4",m:"Aminabad",lat:"26.8457",lng:"80.9272",items:[{n:"Chikan Kurti",p:700}],nav:"Pratap Market",vendor:"Lucknow Chikan",phone:"919000000000"}
+],
+"patna":[
+{id:"tp10ZagNXfA",m:"Maurya Lok",lat:"25.6122",lng:"85.1314",items:[{n:"Handicrafts",p:250}],nav:"Near Museum",vendor:"Bihar Crafts",phone:"918000000000"}
+],
+"bhopal":[
+{id:"C6Nv6hl34SE",m:"New Market",lat:"23.2311",lng:"77.3996",items:[{n:"Bead Bag",p:300}],nav:"Jewelry lanes",vendor:"MP Crafts",phone:"917000000000"}
+],
+"indore":[
+{id:"9N--Md7hu0Q",m:"MT Market",lat:"22.7164",lng:"75.8542",items:[{n:"Fabric",p:400}],nav:"Clock Tower",vendor:"Indore Textiles",phone:"916000000000"}
+],
+"pune":[
+{id:"1g3nGOsMH0A",m:"Juna Bazaar",lat:"18.5284",lng:"73.8569",items:[{n:"Antiques",p:400}],nav:"Kesba Area",vendor:"Vintage Pune",phone:"915000000000"}
+],
+"bangalore":[
+{id:"Tv3gGVG2F38",m:"Chickpet",lat:"12.9698",lng:"77.5772",items:[{n:"Silk",p:1500}],nav:"Old City",vendor:"Silk House",phone:"914000000000"}
 ]
 };
 
@@ -190,8 +216,7 @@ ${v.items.map(i=>`
 <button onclick="toggle('${v.id}')">🎥 Watch Tour</button>
 
 <div id="${v.id}" class="video-box">
-<iframe width="100%" height="200"
-src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
+<iframe width="100%" height="200" src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
 </div>
 
 <p>🏪 ${v.vendor}</p>
