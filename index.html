@@ -3,130 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BazaarCraft | India's Local Market Hub</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <title>BazaarCraft | Premium Market Hub</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        :root {
-            --primary: #FF7B00; --bg-base: #0B0B0F; --surface: #1A1A24; 
-            --text-main: #FFFFFF; --text-muted: #A0A0B0; --accent: #FFB703;
-        }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-base); color: var(--text-main); -webkit-font-smoothing: antialiased; }
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Poppins:wght@300;400;600&display=swap');
         
-        /* Market Pulse Ticker */
-        .pulse-bar { background: #111; color: var(--accent); font-size: 11px; padding: 5px; text-align: center; border-bottom: 1px solid #333; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; animation: scroll 25s linear infinite; }
+        :root {
+            --primary: #FF7B00; --bg: #050507; --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1); --accent: #FFB703;
+        }
+
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #050507 80%);
+            min-height: 100vh;
+        }
+
+        /* Ticker Bar */
+        .pulse-bar { 
+            background: #111; color: var(--accent); font-size: 11px; padding: 6px; 
+            text-align: center; border-bottom: 1px solid var(--border); overflow: hidden;
+        }
+        .ticker { display: inline-block; animation: scroll 25s linear infinite; white-space: nowrap; }
         @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(11, 11, 15, 0.9); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .logo { font-size: 20px; font-weight: 700; background: linear-gradient(45deg, #FF7B00, #FFB703); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        
-        .container { max-width: 550px; margin: 0 auto; padding: 20px 15px 120px; }
-        .market-card { background: var(--surface); border-radius: 16px; padding: 20px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
-        .price-row { display: flex; justify-content: space-between; font-size: 13px; padding: 10px 0; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; }
-        .price-row:hover { background: rgba(255,255,255,0.05); padding-left: 5px; }
-        
-        .calc-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a24; padding: 15px; border-top: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; z-index: 2000; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
-        
-        .watch-btn { width: 100%; background: #333; color: white; border: none; padding: 12px; border-radius: 10px; margin-top: 15px; cursor: pointer; font-weight: 600; }
-        .video-container { display: none; margin-top: 15px; border-radius: 12px; overflow: hidden; }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .logo { font-family: 'Syncopate', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--primary); text-decoration: none; }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+
+        /* Market Card 2.0 */
+        .market-card {
+            background: var(--glass); border: 1px solid var(--border); border-radius: 28px;
+            padding: 25px; backdrop-filter: blur(10px); transition: 0.4s ease;
+        }
+        .market-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        .item-chip {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px; margin: 8px 0; background: rgba(255,255,255,0.02);
+            border-radius: 12px; cursor: pointer; border: 1px solid transparent;
+        }
+        .item-chip:hover { border-color: #4ade80; background: rgba(74, 222, 128, 0.05); }
+        .price { color: #4ade80; font-weight: 700; }
+
+        .video-box { display: none; margin-top: 20px; border-radius: 15px; overflow: hidden; }
+
+        /* Sticky Intelligence Bar */
+        .intel-bar {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(20px);
+            padding: 15px 30px; border-radius: 50px; border: 1px solid var(--primary);
+            display: flex; align-items: center; gap: 40px; z-index: 2000; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
-
     <div class="pulse-bar">
-        <div class="ticker-text">🔥 MARKET PULSE: Varanasi Brass Prices UP (+5%) | Delhi Banjara: Gali 2 is best for furniture today | Jaipur: New Blue Pottery stock at Bapu Bazaar | Kolkata: Chaitra Sale starts next week!</div>
+        <div class="ticker">🔥 MARKET PULSE: Varanasi Brass UP (+5%) | Delhi Banjara: Police checking today, avoid Gali 1 | Jaipur: Blue Pottery stock refreshed!</div>
     </div>
 
     <header>
-        <a href="index.html" class="logo">BazaarCraft</a>
-        <select id="city-selector" style="background:none; color:white; border:1px solid #333; padding:5px; border-radius:8px;" onchange="handleDropdownChange(this.value)">
-            <option value="delhi">Delhi</option>
-            <option value="kolkata">Kolkata</option>
-            <option value="jaipur">Jaipur</option>
-            <option value="mumbai">Mumbai</option>
-            <option value="lucknow">Lucknow</option>
-            <option value="varanasi">Varanasi</option>
-            <option value="patna">Patna</option>
-            <option value="bhopal">Bhopal</option>
-            <option value="indore">Indore</option>
-            <option value="pune">Pune</option>
-            <option value="bangalore">Bangalore</option>
+        <a href="#" class="logo">BAZAARCRAFT</a>
+        <select id="city-selector" onchange="updateFeed(this.value)" style="background:none; color:white; border:none; font-weight:700; cursor:pointer;">
+            <option value="delhi">DELHI</option>
+            <option value="mumbai">MUMBAI</option>
+            <option value="kolkata">KOLKATA</option>
+            <option value="jaipur">JAIPUR</option>
+            <option value="lucknow">LUCKNOW</option>
+            <option value="varanasi">VARANASI</option>
+            <option value="patna">PATNA</option>
+            <option value="bhopal">BHOPAL</option>
+            <option value="indore">INDORE</option>
+            <option value="pune">PUNE</option>
+            <option value="bangalore">BANGALORE</option>
         </select>
     </header>
 
-    <div class="container">
-        <h2 style="font-size: 1.2rem; color: var(--accent);">Intent-First Shopping</h2>
-        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 25px;">Select items to calculate your "Cash to Carry" budget.</p>
-        <div id="market-feed"></div>
-    </div>
+    <div class="container" id="feed"></div>
 
-    <div class="calc-footer">
+    <div class="intel-bar">
         <div>
-            <div style="font-size: 10px; color: var(--text-muted); letter-spacing: 1px;">ESTIMATED CASH NEEDED:</div>
-            <div id="total-budget" style="font-size: 22px; font-weight: 700; color: var(--primary);">₹0</div>
+            <span style="font-size:10px; opacity:0.6; display:block;">CASH TO CARRY</span>
+            <span id="budget" style="font-size:22px; font-weight:700; color:var(--primary);">₹0</span>
         </div>
-        <button onclick="clearBudget()" style="background:none; color:var(--text-muted); border:1px solid #444; padding:8px 15px; border-radius:8px; font-size:11px; font-weight:600;">Reset</button>
+        <button onclick="resetBudget()" style="background:none; border:1px solid #333; color:white; padding:8px 15px; border-radius:20px; cursor:pointer; font-size:11px;">RESET</button>
     </div>
 
     <script>
-        let currentTotal = 0;
-
-        // --- FULL RESTORED NATIONWIDE DATABASE ---
-        const masterDictionary = {
+        let wallet = 0;
+        const database = {
             "delhi": [
-                { id: "oxdjZ8nSDOs", market: "Banjara Market", items: [{n: "Full Length Mirror", p: 1200}, {n: "Ceramic Table Vase", p: 250}], tip: "Bargain starts at 40% of quoted price." },
-                { id: "wpPnBZOggAE", market: "Lajpat Nagar", items: [{n: "Designer Kurti", p: 650}, {n: "Bangle Set", p: 150}], tip: "Check Gali 2 for hidden fabric gems." },
-                { id: "qM5Ycwz8-LA", market: "Sarojini Nagar", items: [{n: "Summer Tops", p: 150}, {n: "Footwear", p: 300}], tip: "Carry a big bag; they charge extra for polybags." }
+                { id: "oxdjZ8nSDOs", m: "Banjara Market", items: [{n: "Big Mirror", p: 800}, {n: "Ceramic Pot", p: 200}], tip: "Bargain starts at 3x price." },
+                { id: "wpPnBZOggAE", m: "Lajpat Nagar", items: [{n: "Designer Suits", p: 1200}], tip: "Monday is for clearance." }
             ],
-            "kolkata": [
-                { id: "kcjqDg0hmRE", market: "Galiff Street", items: [{n: "Terracotta Bird", p: 60}, {n: "Indoor Plant", p: 120}], tip: "Market closes by 11 AM sharp on Sundays." },
-                { id: "399kxCYl7Yw", market: "Gariahat", items: [{n: "Tant Saree", p: 900}, {n: "Oxidized Jhumka", p: 80}], tip: "Don't miss the street food while shopping." },
-                { id: "V-3bALJOmek", market: "Hatibagan", items: [{n: "Home Decor", p: 200}, {n: "Nightwear", p: 350}], tip: "North Kolkata's best budget hub." }
-            ],
-            "jaipur": [
-                { id: "kCdTLhyzl8A", market: "Bapu Bazaar", items: [{n: "Leather Mojari", p: 350}, {n: "Sanganeri Bedspread", p: 850}], tip: "The inner lanes have lower prices than main road." },
-                { id: "qKUW-l4Hy6M", market: "Johari Bazaar", items: [{n: "Kundan Ring", p: 1200}, {n: "Lac Bangles", p: 200}], tip: "Famous for authentic silver work." }
-            ],
-            "varanasi": [
-                { id: "Rf1IHg85_TQ", market: "Thatheri Bazaar", items: [{n: "Brass Kalash", p: 450}, {n: "Copper Bottle", p: 400}], tip: "Authenticity check: Pure brass is heavy and cold." }
-            ],
-            "lucknow": [
-                { id: "8TWLIsL6fXM", market: "Aminabad", items: [{n: "Chikan Kurta", p: 700}, {n: "Lucknowi Jutti", p: 400}], tip: "Compare handwork vs machine work closely." }
-            ],
-            "mumbai": [
-                { id: "WbY2l_VOigo", market: "Crawford Market", items: [{n: "Imported Crockery", p: 300}, {n: "Party Decor", p: 150}], tip: "Wholesale rates only if you buy 3+ items." }
-            ],
-            "patna": [
-                { id: "RDfb3o5o6Sc", market: "Maurya Lok", items: [{n: "Madhubani Art", p: 500}, {n: "Bamboo Lamp", p: 350}], tip: "Govt stalls are fixed price but authentic." }
-            ],
-            "bhopal": [
-                { id: "rsOPFJebPMg", market: "New Market", items: [{n: "Beaded Bag", p: 300}, {n: "Zardosi Pillow", p: 450}], tip: "Ask for the 'Bhopali Batua' shops." }
-            ],
-            "indore": [
-                { id: "7LyTGXM3haU", market: "MT Cloth Market", items: [{n: "Cotton Curtains", p: 500}, {n: "Sofa Covers", p: 800}], tip: "Purely a wholesale cloth destination." }
-            ]
+            "kolkata": [{ id: "kcjqDg0hmRE", m: "Galiff Street", items: [{n: "Rare Plants", p: 150}], tip: "Early morning only." }],
+            "jaipur": [{ id: "kCdTLhyzl8A", m: "Bapu Bazaar", items: [{n: "Mojaris", p: 350}], tip: "Inner lanes are cheaper." }],
+            "varanasi": [{ id: "Rf1IHg85_TQ", m: "Thatheri Bazaar", items: [{n: "Brass Idol", p: 500}], tip: "Pure brass is heavy." }],
+            "mumbai": [{ id: "WbY2l_VOigo", m: "Crawford", items: [{n: "Kitchenware", p: 150}], tip: "Wholesale only." }],
+            "lucknow": [{ id: "8TWLIsL6fXM", m: "Aminabad", items: [{n: "Chikan Kurti", p: 700}], tip: "Verify handwork." }],
+            "patna": [{ id: "RDfb3o5o6Sc", m: "Maurya Lok", items: [{n: "Handicrafts", p: 250}], tip: "Fixed Govt rates." }],
+            "bhopal": [{ id: "rsOPFJebPMg", m: "New Market", items: [{n: "Zardosi", p: 500}], tip: "Ask for local Batua." }],
+            "indore": [{ id: "7LyTGXM3haU", m: "MT Cloth Market", items: [{n: "Fabric", p: 400}], tip: "Wholesale hub." }],
+            "pune": [{ id: "aGl_H_gGf_o", m: "Juna Bazaar", items: [{n: "Antiques", p: 400}], tip: "Wednesday/Sunday." }],
+            "bangalore": [{ id: "1h_wt99EhXQ", m: "Chickpet", items: [{n: "Silk Sarees", p: 1200}], tip: "Great for weddings." }]
         };
 
-        function addToBudget(price) { currentTotal += price; document.getElementById('total-budget').innerText = "₹" + currentTotal; }
-        function clearBudget() { currentTotal = 0; document.getElementById('total-budget').innerText = "₹0"; }
-
-        function renderFeed(list) {
-            const feed = document.getElementById('market-feed'); feed.innerHTML = "";
-            if(!list) return;
+        function render(list) {
+            const feed = document.getElementById('feed'); feed.innerHTML = "";
             list.forEach(v => {
-                const card = document.createElement("div"); card.className = "market-card";
+                const card = document.createElement('div'); card.className = 'market-card';
                 card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                        <h3 style="font-size:15px; margin:0;">${v.market}</h3>
-                        <span style="font-size:10px; color:var(--accent); font-weight:700;">PRO TIP: ${v.tip}</span>
-                    </div>
-                    <div style="margin:20px 0;">
-                        ${v.items.map(i => `<div class="price-row" onclick="addToBudget(${i.p})"><span>➕ ${i.n}</span><span style="color:#4ade80; font-weight:700;">₹${i.p}</span></div>`).join("")}
-                    </div>
-                    <button class="watch-btn" onclick="toggleVideo('${v.id}')">▶ View Video Proof</button>
-                    <div id="vid-${v.id}" class="video-container">
+                    <div style="font-size:10px; color:var(--accent); margin-bottom:10px; font-weight:700;">${v.m.toUpperCase()}</div>
+                    ${v.items.map(i => `<div class="item-chip" onclick="add(${i.p})"><span>➕ ${i.n}</span><span class="price">₹${i.p}</span></div>`).join('')}
+                    <div style="font-size:11px; margin:15px 0; color:var(--text-muted);">💡 ${v.tip}</div>
+                    <button onclick="showVideo('${v.id}')" style="width:100%; padding:12px; border-radius:12px; border:none; background:white; color:black; font-weight:700; cursor:pointer;">WATCH TOUR</button>
+                    <div id="${v.id}" class="video-box">
                         <div style="position:relative; padding-bottom:56.25%; height:0;"><iframe src="https://www.youtube.com/embed/${v.id}" style="position:absolute; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>
                     </div>
                 `;
@@ -134,14 +130,12 @@
             });
         }
 
-        function toggleVideo(id) {
-            let el = document.getElementById('vid-' + id);
-            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-        }
+        function add(p) { wallet += p; document.getElementById('budget').innerText = "₹" + wallet; }
+        function resetBudget() { wallet = 0; document.getElementById('budget').innerText = "₹0"; }
+        function showVideo(id) { let b = document.getElementById(id); b.style.display = (b.style.display === 'block') ? 'none' : 'block'; }
+        function updateFeed(v) { render(database[v]); }
 
-        function handleDropdownChange(v) { document.getElementById('city-title').innerText = v.toUpperCase(); renderFeed(masterDictionary[v]); }
-        
-        window.onload = () => { renderFeed(masterDictionary["delhi"]); };
+        window.onload = () => render(database.delhi);
     </script>
 </body>
 </html>
