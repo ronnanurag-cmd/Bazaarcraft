@@ -57,7 +57,7 @@ input, select.filter-select { padding: 10px; border-radius: 12px; border: 1px so
 
 .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
 .item-card { background: #1a1a1a; padding: 10px; border-radius: 16px; position: relative; }
-.item-thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-bottom: 5px; }
+.item-thumb { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-bottom: 5px; background: #222; }
 
 .wish-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); border: none; color: var(--primary); border-radius: 50%; width: 25px; height: 25px; cursor: pointer; }
 
@@ -90,18 +90,22 @@ input, select.filter-select { padding: 10px; border-radius: 12px; border: 1px so
         <select class="city-picker" onchange="updateCity(this.value)">
             <option value="delhi">DELHI</option>
             <option value="mumbai">MUMBAI</option>
-            <option value="kolkata">KOLKATA</option>
+            <option value="goa">GOA 🏖️</option>
+            <option value="pondicherry">PONDICHERRY 🗼</option>
+            <option value="rishikesh">RISHIKESH ⛰️</option>
+            <option value="manali">MANALI ❄️</option>
             <option value="jaipur">JAIPUR</option>
-            <option value="lucknow">LUCKNOW</option>
+            <option value="kolkata">KOLKATA</option>
             <option value="varanasi">VARANASI</option>
+            <option value="lucknow">LUCKNOW</option>
+            <option value="pune">PUNE</option>
+            <option value="bangalore">BANGALORE</option>
             <option value="patna">PATNA</option>
             <option value="bhopal">BHOPAL</option>
             <option value="indore">INDORE</option>
-            <option value="pune">PUNE</option>
-            <option value="bangalore">BANGALORE</option>
         </select>
         <button id="login-btn" class="login-btn" onclick="login()">LOGIN</button>
-        <img id="user-img" class="profile-img" onclick="logout()">
+        <img id="user-img" class="profile-img" onclick="logout()" title="Click to Logout">
     </div>
 </header>
 
@@ -111,6 +115,7 @@ input, select.filter-select { padding: 10px; border-radius: 12px; border: 1px so
         <option value="all">Any Budget</option>
         <option value="500">Under ₹500</option>
         <option value="1000">Under ₹1000</option>
+        <option value="2000">Under ₹2000</option>
     </select>
 </div>
 
@@ -128,7 +133,7 @@ input, select.filter-select { padding: 10px; border-radius: 12px; border: 1px so
 </div>
 
 <script>
-// --- 1. FIREBASE INITIALIZATION ---
+// --- 1. FIREBASE INITIALIZATION (Your Keys Integrated) ---
 const firebaseConfig = {
   apiKey: "AIzaSyDQPbexaLV0te_3u1cGV5MYMys3rJfVeAA",
   authDomain: "bazaarcraft.firebaseapp.com",
@@ -151,7 +156,7 @@ let currentUser = null;
 // --- 2. AUTH LOGIC ---
 function login() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+    auth.signInWithPopup(provider).catch(err => alert("Login failed: " + err.message));
 }
 
 function logout() {
@@ -177,7 +182,7 @@ function loadCloudData() {
     });
 }
 
-// --- 3. THE FULL DATABASE (11 CITIES) ---
+// --- 3. MASTER DATABASE (15 CITIES - NO OMISSIONS) ---
 const masterDB = {
     "delhi": [
         {id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Mirrors", p:800},{n:"Ceramics", p:200}], nav:"Sec 54 Metro → Gaushala Road", vendor:"Raju Decor", phone:"919999999999"},
@@ -188,15 +193,28 @@ const masterDB = {
         {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Lamps", p:400}], nav:"Behind Mahatma Phule Mandai", vendor:"A1 Lights", phone:"918888888888"},
         {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Hub", p:1000}], nav:"Mutton Street", vendor:"Antique King", phone:"917777777777"}
     ],
-    "kolkata":[{id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.5186", lng:"88.3664", items:[{n:"Saree", p:900}], nav:"Gariahat Crossing", vendor:"Bengal Crafts", phone:"9196"}],
+    "goa": [
+        {id:"V9_W_1mCqZg", m:"Anjuna Flea Market", lat:"15.5797", lng:"73.7384", items:[{n:"Macrame Wall", p:600}, {n:"Hammocks", p:1200}], nav:"Anjuna Beach side. Wednesdays only.", vendor:"Goa Hippie Finds", phone:"919988776655"},
+        {id:"l_q0N7XN6_E", m:"Mapusa Market", lat:"15.5937", lng:"73.8135", items:[{n:"Pottery", p:350}, {n:"Baskets", p:150}], nav:"Mapusa City Center. Friday morning.", vendor:"Local Artisans", phone:"919900112233"}
+    ],
+    "pondicherry": [
+        {id:"S6l-K2tNf-g", m:"Sunday Market", lat:"11.9344", lng:"79.8300", items:[{n:"Paper Lamps", p:250}, {n:"French Decor", p:800}], nav:"MG Road. Arrive by 4 PM Sunday.", vendor:"Pondi Crafts", phone:"919876543210"}
+    ],
+    "rishikesh": [
+        {id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.1287", lng:"78.3283", items:[{n:"Crystals", p:300}, {n:"Singing Bowls", p:1500}], nav:"Lanes near Laxman Jhula Bridge.", vendor:"Himalayan Souls", phone:"919000111222"}
+    ],
+    "manali": [
+        {id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.2536", lng:"77.1822", items:[{n:"Woolen Art", p:450}, {n:"Dreamcatchers", p:200}], nav:"Walk up from Old Manali bridge.", vendor:"Mountain Magic", phone:"919111222333"}
+    ],
     "jaipur":[{id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.9189", lng:"75.8236", items:[{n:"Mojaris", p:350}], nav:"Sanganeri Gate", vendor:"Pink City Art", phone:"9195"}],
+    "kolkata":[{id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.5186", lng:"88.3664", items:[{n:"Saree", p:900}], nav:"Gariahat Crossing", vendor:"Bengal Crafts", phone:"9196"}],
     "varanasi":[{id:"nVAeSFIGgAE", m:"Thatheri", lat:"25.3117", lng:"82.9996", items:[{n:"Brassware", p:500}], nav:"Near Chowk", vendor:"Kashi Brass", phone:"9194"}],
     "lucknow":[{id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.8457", lng:"80.9272", items:[{n:"Chikan Kurti", p:700}], nav:"Pratap Market", vendor:"Lucknowi Hub", phone:"9193"}],
+    "pune":[{id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.5284", lng:"73.8569", items:[{n:"Antiques", p:400}], nav:"Kesba Peth Area", vendor:"Vintage Pune", phone:"9189"}],
+    "bangalore":[{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.9698", lng:"77.5772", items:[{n:"Silk Saree", p:1500}], nav:"Old City Area", vendor:"Silk House", phone:"9188"}],
     "patna":[{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.6122", lng:"85.1314", items:[{n:"Handicrafts", p:250}], nav:"Museum Road", vendor:"Bihar Art", phone:"9192"}],
     "bhopal":[{id:"C6Nv6hl34SE", m:"New Market", lat:"23.2311", lng:"77.3996", items:[{n:"Bead Bag", p:300}], nav:"Inner Jeweller Lane", vendor:"MP Crafts", phone:"9191"}],
-    "indore":[{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.7164", lng:"75.8542", items:[{n:"Fabric", p:400}], nav:"Clock Tower Area", vendor:"Indore Textiles", phone:"9190"}],
-    "pune":[{id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.5284", lng:"73.8569", items:[{n:"Antiques", p:400}], nav:"Kesba Peth", vendor:"Vintage Pune", phone:"9189"}],
-    "bangalore":[{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.9698", lng:"77.5772", items:[{n:"Silk", p:1500}], nav:"Old City Area", vendor:"Silk House", phone:"9188"}]
+    "indore":[{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.7164", lng:"75.8542", items:[{n:"Fabric", p:400}], nav:"Clock Tower Area", vendor:"Indore Textiles", phone:"9190"}]
 };
 
 // --- 4. CORE FUNCTIONS ---
@@ -205,7 +223,7 @@ function render(data) {
     feed.innerHTML = "";
     data.forEach(v => {
         if(v.items.length === 0) return;
-        let maps = `http://googleusercontent.com/maps.google.com/search?api=1&query=${v.lat},${v.lng}`;
+        let maps = `https://www.google.com/maps/search/?api=1&query=${v.lat},${v.lng}`;
         let uber = `https://m.uber.com/ul/?action=setPickup&dropoff[latitude]=${v.lat}&dropoff[longitude]=${v.lng}`;
         
         feed.innerHTML += `
@@ -220,7 +238,7 @@ function render(data) {
                 ${v.items.map(i => `
                 <div class="item-card">
                     <button class="wish-btn" onclick="saveToWishlist('${i.n}', ${i.p}, '${v.m}', '${v.nav}')">♥</button>
-                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb">
+                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb" onerror="this.src='https://via.placeholder.com/150x80?text=Preview'">
                     <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="addToBudget(${i.p})">
                         <span style="font-size:11px;">${i.n}</span>
                         <span style="color:var(--accent); font-weight:700; font-size:11px;">₹${i.p}</span>
@@ -268,24 +286,39 @@ function filterBudget(val) {
     render(filtered);
 }
 
-function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(22);
-    doc.setTextColor(255, 123, 0);
-    doc.text("BazaarCraft Itinerary", 20, 20);
-    doc.setFontSize(12);
-    doc.setTextColor(0,0,0);
-    let y = 35;
-    wishlist.forEach((item, index) => {
-        if(y > 270) { doc.addPage(); y = 20; }
-        doc.text(`${index+1}. ${item.name} (₹${item.price}) - ${item.market}`, 20, y);
-        y += 10;
-    });
-    doc.save("BazaarCraft_Trip.pdf");
+async function exportPDF() {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(22);
+        doc.setTextColor(255, 123, 0);
+        doc.text("BazaarCraft Itinerary", 20, 20);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Offline Shopping Guide - ${new Date().toLocaleDateString()}`, 20, 28);
+        doc.line(20, 32, 190, 32);
+
+        let y = 45;
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+
+        if (wishlist.length === 0) {
+            doc.text("Wishlist is empty. Add items first!", 20, y);
+        } else {
+            wishlist.forEach((item, index) => {
+                if (y > 260) { doc.addPage(); y = 20; }
+                doc.setFont("helvetica", "bold");
+                doc.text(`${index + 1}. ${item.name} (₹${item.price})`, 20, y);
+                doc.setFont("helvetica", "normal");
+                doc.text(`   Market: ${item.market} | Gali: ${item.nav}`, 20, y + 7);
+                y += 15;
+            });
+        }
+        doc.save("BazaarCraft_Trip.pdf");
+    } catch (e) { alert("PDF Error: Please check internet connection."); }
 }
 
-// Start
+// Startup
 updateCity("delhi");
 </script>
 
