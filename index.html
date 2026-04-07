@@ -2,18 +2,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BazaarCraft PRO+</title><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><style>
+<title>BazaarCraft PRO FIXED</title><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><style>
 body{margin:0;font-family:Arial;background:#0b0b0f;color:#fff}
-header{display:flex;justify-content:space-between;padding:15px;background:#111;position:sticky;top:0;z-index:10}
+header{display:flex;justify-content:space-between;padding:15px;background:#111}
 .container{padding:15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
 .card{background:#15151c;padding:15px;border-radius:20px;border:1px solid #222}
 .item{background:#1f1f27;padding:10px;border-radius:12px;margin:8px 0}
 img{width:100%;border-radius:10px;height:140px;object-fit:cover;background:#222}
-button{cursor:pointer;margin-top:5px}
 .search{width:100%;padding:12px;margin:10px 0;border-radius:12px;border:none;background:#111;color:white}
 .budget{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);background:#111;padding:10px 20px;border-radius:20px;border:1px solid #333}
 </style></head><body><header>
-<h3>BazaarCraft PRO+</h3>
+<h3>BazaarCraft PRO FIXED</h3>
 <button onclick="login()">Login</button>
 </header><input class="search" placeholder="Search anything..." oninput="searchItems(this.value)"><div class="container" id="feed"></div><div class="budget">Total: ₹<span id="total">0</span> | Budget: ₹<input id="budgetInput" type="number" style="width:80px"></div><script>
 
@@ -44,7 +43,16 @@ async function loadData(){
  try{
  const snap=await db.collection("markets").get();
  dataCache=[];
- snap.forEach(doc=>dataCache.push(doc.data()));
+ snap.forEach(doc=>{
+ const d=doc.data();
+ if(d && Array.isArray(d.items)){
+ dataCache.push(d);
+ }
+ });
+ if(dataCache.length===0){
+ document.getElementById("feed").innerHTML="<p>No data found. Check Firestore.</p>";
+ return;
+ }
  render(dataCache);
  }catch(e){
  console.error(e);
@@ -57,12 +65,13 @@ function render(data){
  feed.innerHTML="";
  data.forEach(m=>{
  let html=`<div class='card'><h3>${m.name}</h3>`;
+ if(!m.items || !Array.isArray(m.items)) return;
  m.items.forEach(i=>{
- const img = i.img ? i.img : "https://via.placeholder.com/300x150?text=No+Image";
+ const img = i.img || `https://source.unsplash.com/300x150/?${encodeURIComponent(i.name)}`;
  html+=`<div class='item'>
- <img src="${img}" onerror="this.src='https://via.placeholder.com/300x150?text=Error'">
+ <img src="${img}" onerror="this.src='https://via.placeholder.com/300x150?text=No+Image'">
  <div onclick="add(${i.price})">${i.name} - ₹${i.price}</div>
- <button onclick="saveItem('${i.name.replace(/'/g, "")} ', ${i.price}, '${m.name.replace(/'/g, "")}')">❤️ Save</button>
+ <button onclick="saveItem('${i.name.replace(/'/g, "")}', ${i.price}, '${m.name.replace(/'/g, "")}')">❤️ Save</button>
  ${i.video ? `<button onclick="watch('${i.video}')">🎥 Video</button>` : ""}
  </div>`;
  });
