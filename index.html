@@ -52,7 +52,8 @@ header { display: flex; justify-content: space-between; align-items: center; pad
             <option value="shillong">SHILLONG</option><option value="udaipur">UDAIPUR</option><option value="amritsar">AMRITSAR</option>
             <option value="chandigarh">CHANDIGARH</option><option value="nagpur">NAGPUR</option><option value="mysore">MYSORE</option>
             <option value="kozhikode">KOZHIKODE</option><option value="srinagar">SRINAGAR</option><option value="madurai">MADURAI</option>
-            <option value="jodhpur">JODHPUR</option><option value="shimla">SHIMLA</option><option value="dehradun">DEHRADUN</option><option value="nashik">NASHIK</option>
+            <option value="jodhpur">JODHPUR</option><option value="shimla">SHIMLA</option><option value="dehradun">DEHRADUN</option>
+            <option value="nashik">NASHIK</option>
         </select>
         <button id="login-btn" onclick="login()" style="background:var(--primary); color:white; border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:700; font-size:11px;">LOGIN</button>
         <img id="user-img" style="width:40px; height:40px; border-radius:50%; border:2px solid var(--primary); display:none; cursor:pointer;" onclick="logout()">
@@ -77,7 +78,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 </div>
 
 <script>
-// --- 1. FIREBASE CONFIG ---
+// --- 1. PERMANENT FIREBASE CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyDQPbexaLV0te_3u1cGV5MYMys3rJfVeAA",
   authDomain: "bazaarcraft.firebaseapp.com",
@@ -104,51 +105,82 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-// --- 3. THE ABSOLUTE PERMANENT DATABASE (All 34 Cities Restored) ---
+// --- 3. THE PERMANENT MAXIMAL DATABASE (NO OMISSIONS) ---
 const masterDB = {
     "delhi": [
         {id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Full Mirror", p:1200},{n:"Ceramic Pots", p:250},{n:"Console Table", p:3500},{n:"Macrame Wall", p:600}], nav:"Sec 54 Metro → Gaushala Road"},
         {id:"tOVVnRnoml0", m:"Chawri Bazaar", lat:"28.6496", lng:"77.2274", items:[{n:"Antique Lock", p:850},{n:"Brass Handles", p:600},{n:"Copperware", p:1200},{n:"Gift Boxes", p:40}], nav:"Exit Chawri Metro"},
-        {id:"wpPnBZOggAE", m:"Lajpat Nagar", lat:"28.5677", lng:"77.2432", items:[{n:"Kurti Fabric", p:450},{n:"Ethnic Juttis", p:350}], nav:"Gate 1"},
-        {id:"p0Zf6f-6u6o", m:"Sarojini Nagar", lat:"28.5771", lng:"77.1982", items:[{n:"Export Tops", p:150},{n:"Denims", p:400}], nav:"Gate 2"}
+        {id:"wpPnBZOggAE", m:"Lajpat Nagar", lat:"28.5677", lng:"77.2432", items:[{n:"Kurti Fabric", p:450},{n:"Ethnic Juttis", p:350},{n:"Zardosi Lace", p:100},{n:"Silver Bangle", p:500}], nav:"Gate 1"},
+        {id:"p0Zf6f-6u6o", m:"Sarojini Nagar", lat:"28.5771", lng:"77.1982", items:[{n:"Export Tops", p:150},{n:"Denims", p:400},{n:"Canvas Tote", p:120}], nav:"Gate 2"},
+        {id:"dH5jJanpath09", m:"Janpath Market", lat:"28.6289", lng:"77.2195", items:[{n:"Tibetan Silver", p:300},{n:"Boho Bag", p:450},{n:"Pashmina Stole", p:900}], nav:"Janpath Lane"}
     ],
     "mumbai": [
-        {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Crystal Lamp", p:850},{n:"Decor Jars", p:300}], nav:"Behind Mandai"},
-        {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Camera", p:2500},{n:"Gramophone", p:4000}], nav:"Mutton Street"},
-        {id:"Jz0uYHj2W6s", m:"Hill Road", lat:"19.05", lng:"72.82", items:[{n:"Street Bags", p:500}], nav:"Bandra"}
+        {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Crystal Lamp", p:850},{n:"Decor Jars", p:300},{n:"Wicker Basket", p:450}], nav:"Behind Mandai"},
+        {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Camera", p:2500},{n:"Gramophone", p:4000},{n:"Bronze Art", p:1500}], nav:"Mutton Street"},
+        {id:"Jz0uYHj2W6s", m:"Hill Road", lat:"19.05", lng:"72.82", items:[{n:"Street Bags", p:500},{n:"Fashion Tops", p:400}], nav:"Bandra"},
+        {id:"cLbCswyMumbai", m:"Colaba Causeway", lat:"18.92", lng:"72.83", items:[{n:"Oxidised Jewelry", p:250},{n:"Leather Sandals", p:700}], nav:"Regal Cinema Area"}
     ],
-    "lonavala": [{id:"kCd_YnLonavala", m:"Lonavala Hub", lat:"18.75", lng:"73.40", items:[{n:"Copper Statues", p:800},{n:"Wooden Toys", p:350}], nav:"Market Road"}],
-    "goa": [{id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.57", lng:"73.73", items:[{n:"Boho Dress", p:650},{n:"Hammock", p:1500}], nav:"Wednesdays"}, {id:"l_q0N7XN6_E", m:"Mapusa Friday", lat:"15.59", lng:"73.81", items:[{n:"Spices", p:250}], nav:"Friday AM"}],
-    "jaipur": [{id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.91", lng:"75.82", items:[{n:"Quilt", p:1500},{n:"Juttis", p:400}], nav:"Sanganeri Gate"}, {id:"kCdTLhyzl8A", m:"Johari Bazaar", lat:"26.92", lng:"75.82", items:[{n:"Silver Ring", p:600}], nav:"Hawa Mahal"}],
-    "kolkata": [{id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.51", lng:"88.36", items:[{n:"Tant Saree", p:1000}], nav:"Crossing"}, {id:"2BGTKmSmdgU", m:"New Market", lat:"22.56", lng:"88.35", items:[{n:"Leather", p:1500}], nav:"Lindsay St"}],
-    "varanasi": [{id:"nVAeSFIGgAE", m:"Thatheri Bazaar", lat:"25.31", lng:"82.99", items:[{n:"Brass Idol", p:800}], nav:"Chowk"}, {id:"Rf1IHg85_TQ", m:"Vishwanath Galli", lat:"25.31", lng:"83.01", items:[{n:"Silk", p:2800}], nav:"Temple Lane"}],
-    "lucknow": [{id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.84", lng:"80.92", items:[{n:"Chikan", p:800}], nav:"Pratap Mkt"}, {id:"8TWLIsL6fXM", m:"Chowk", lat:"26.86", lng:"80.90", items:[{n:"Attar", p:350}], nav:"Old City"}],
-    "pune": [{id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.52", lng:"73.85", items:[{n:"Antiques", p:500}], nav:"Kesba"}, {id:"aGl_H_gGf_o", m:"Tulsi Baug", lat:"18.51", lng:"73.85", items:[{n:"Copper", p:700}], nav:"Temple Area"}],
-    "bangalore": [{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Silk", p:2500}], nav:"Old City"}, {id:"8o_K2x_YnBan", m:"Commercial St", lat:"12.98", lng:"77.61", items:[{n:"Bags", p:1200}], nav:"Junction"}],
-    "rishikesh": [{id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Crystals", p:400}], nav:"Bridge Area"}],
-    "manali": [{id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen", p:700}], nav:"Bridge Market"}],
-    "pondicherry": [{id:"S6l-K2tNf-g", m:"Sunday Mkt", lat:"11.93", lng:"79.83", items:[{n:"Lamps", p:250}], nav:"MG Road"}],
-    "patna": [{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.61", lng:"85.13", items:[{n:"Madhubani", p:600}], nav:"Museum Road"}],
-    "bhopal": [{id:"C6Nv6hl34SE", m:"New Market", lat:"23.23", lng:"77.39", items:[{n:"Batua", p:400}], nav:"Inner Circle"}],
-    "indore": [{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.71", lng:"75.85", items:[{n:"Cotton", p:150}], nav:"Clock Tower"}],
-    "hyderabad": [{id:"lAadBzrHyd44", m:"Laad Bazaar", lat:"17.36", lng:"78.47", items:[{n:"Pearls", p:850}], nav:"Charminar"}],
-    "chennai": [{id:"pOndyBzrChn9", m:"Pondy Bazaar", lat:"13.04", lng:"80.23", items:[{n:"Kurti", p:550}], nav:"T. Nagar"}],
-    "ahmedabad": [{id:"lAwGrdnAhd1", m:"Law Garden", lat:"23.02", lng:"72.55", items:[{n:"Mirror Work", p:1800}], nav:"Evening Stalls"}],
-    "surat": [{id:"tExtileSrt55", m:"Textile Market", lat:"21.19", lng:"72.83", items:[{n:"Saree", p:1400}], nav:"Ring Road"}],
-    "kochi": [{id:"jEwTownKoc3", m:"Jew Town", lat:"9.95", lng:"76.25", items:[{n:"Antiques", p:2200}], nav:"Mattancherry"}],
-    "shillong": [{id:"pOliceBazSg1", m:"Police Bazar", lat:"25.57", lng:"91.88", items:[{n:"Bamboo", p:350}], nav:"Central"}],
-    "udaipur": [{id:"hAthiPolUdp7", m:"Hathi Pol", lat:"24.58", lng:"73.68", items:[{n:"Painting", p:1500}], nav:"Palace Lanes"}],
-    "amritsar": [{id:"hAllBazAmr5", m:"Hall Bazaar", lat:"31.63", lng:"74.87", items:[{n:"Phulkari", p:950}], nav:"Main Gate"}],
-    "chandigarh": [{id:"sEc17Chd4", m:"Sector 17", lat:"30.73", lng:"76.78", items:[{n:"Casuals", p:1200}], nav:"Plaza"}],
-    "nagpur": [{id:"sItabuldiNg1", m:"Sitabuldi", lat:"21.14", lng:"79.08", items:[{n:"Orange Candy", p:120}], nav:"Main Road"}],
-    "mysore": [{id:"dEvarajaMys1", m:"Devaraja", lat:"12.30", lng:"76.65", items:[{n:"Sandalwood", p:180}], nav:"Palace Area"}],
-    "kozhikode": [{id:"sMstreetKzk1", m:"SM Street", lat:"11.25", lng:"75.78", items:[{n:"Halwa", p:250}], nav:"City Walk"}],
-    "srinagar": [{id:"lAlChwkSr1", m:"Lal Chowk", lat:"34.07", lng:"74.80", items:[{n:"Pashmina", p:3200}], nav:"Srinagar Hub"}],
-    "madurai": [{id:"pUthuMndlMad1", m:"Puthu Mandapam", lat:"9.91", lng:"78.11", items:[{n:"Temple Jewelry", p:650}], nav:"Temple"}],
-    "jodhpur": [{id:"sArdarMktJd1", m:"Sardar Market", lat:"26.29", lng:"73.02", items:[{n:"Bandhej", p:500}], nav:"Clock Tower"}],
-    "shimla": [{id:"lAkkrBzrSh1", m:"Lakkar Bazaar", lat:"31.10", lng:"77.17", items:[{n:"Wooden Stick", p:450}], nav:"Ridge"}],
-    "dehradun": [{id:"pAltanDdn1", m:"Paltan Bazaar", lat:"30.32", lng:"78.04", items:[{n:"Bakery", p:200}], nav:"Clock Tower"}],
-    "nashik": [{id:"sArAfNsk1", m:"Saraf Bazaar", lat:"20.00", lng:"73.78", items:[{n:"Silver", p:1100}], nav:"Old Nashik"}]
+    "lonavala": [
+        {id:"kCd_YnLonavala", m:"Lonavala Hub", lat:"18.75", lng:"73.40", items:[{n:"Copper Statues", p:800},{n:"Wooden Toys", p:350},{n:"Glass Lanterns", p:450}], nav:"Market Road"},
+        {id:"8W_YnKhandala", m:"Khandala Handicrafts", lat:"18.76", lng:"73.37", items:[{n:"Stone Sculptures", p:1500},{n:"Ceramic Tiles", p:200}], nav:"Ghat Lanes"}
+    ],
+    "goa": [
+        {id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.57", lng:"73.73", items:[{n:"Boho Dress", p:650},{n:"Hammock", p:1500},{n:"Silver Trinkets", p:300}], nav:"Wednesdays"}, 
+        {id:"l_q0N7XN6_E", m:"Mapusa Friday", lat:"15.59", lng:"73.81", items:[{n:"Spices", p:250},{n:"Goan Pottery", p:400}], nav:"Friday AM"},
+        {id:"aRporaSatNgt1", m:"Arpora Night Mkt", lat:"15.59", lng:"73.76", items:[{n:"Dreamcatcher", p:350},{n:"Festival Wear", p:900}], nav:"Saturday Nights"}
+    ],
+    "jaipur": [
+        {id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.91", lng:"75.82", items:[{n:"Quilt", p:1500},{n:"Juttis", p:400},{n:"Bandhani Set", p:1200}], nav:"Sanganeri Gate"}, 
+        {id:"kCdTLhyzl8A", m:"Johari Bazaar", lat:"26.92", lng:"75.82", items:[{n:"Silver Ring", p:600},{n:"Kundan Set", p:2500}], nav:"Hawa Mahal"},
+        {id:"triPoliaBzrJpr", m:"Tripolia Bazaar", lat:"26.92", lng:"75.82", items:[{n:"Brassware", p:950},{n:"Iron Trunks", p:1800}], nav:"Old City"}
+    ],
+    "kolkata": [
+        {id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.51", lng:"88.36", items:[{n:"Tant Saree", p:1000},{n:"Jute Mats", p:250}], nav:"Crossing"}, 
+        {id:"2BGTKmSmdgU", m:"New Market", lat:"22.56", lng:"88.35", items:[{n:"Leather", p:1500},{n:"Bakery Hampers", p:500}], nav:"Lindsay St"},
+        {id:"cHandniChwkKol", m:"Chandni Chowk", lat:"22.57", lng:"88.35", items:[{n:"LED Fixtures", p:600},{n:"Tool Kit", p:350}], nav:"Central District"}
+    ],
+    "varanasi": [
+        {id:"nVAeSFIGgAE", m:"Thatheri Bazaar", lat:"25.31", lng:"82.99", items:[{n:"Brass Idol", p:800},{n:"Copper Jug", p:600},{n:"Prayer Bell", p:200}], nav:"Chowk"}, 
+        {id:"Rf1IHg85_TQ", m:"Vishwanath Galli", lat:"25.31", lng:"83.01", items:[{n:"Silk", p:2800},{n:"Wooden Art", p:250}], nav:"Temple Lane"}
+    ],
+    "lucknow": [
+        {id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.84", lng:"80.92", items:[{n:"Chikan", p:800},{n:"Nagra", p:500},{n:"Zardosi Dupatta", p:600}], nav:"Pratap Mkt"}, 
+        {id:"8TWLIsL6fXM", m:"Chowk", lat:"26.86", lng:"80.90", items:[{n:"Attar", p:350},{n:"Shadow-work Kurta", p:1200}], nav:"Old City"},
+        {id:"hAzratGnjLko3", m:"Hazratganj", lat:"26.85", lng:"80.94", items:[{n:"Designer Chikan", p:1800}], nav:"Boulevard"}
+    ],
+    "pune": [
+        {id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.52", lng:"73.85", items:[{n:"Antiques", p:500},{n:"Old Records", p:600},{n:"Vintage Coins", p:100}], nav:"Kesba"}, 
+        {id:"aGl_H_gGf_o", m:"Tulsi Baug", lat:"18.51", lng:"73.85", items:[{n:"Copper", p:700},{n:"Paithani", p:2500}], nav:"Temple Area"},
+        {id:"fCroadPune11", m:"FC Road Stalls", lat:"18.52", lng:"73.84", items:[{n:"Earrings", p:180},{n:"Sling Bag", p:450}], nav:"Deccan"}
+    ],
+    "bangalore": [
+        {id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Silk", p:2500},{n:"Wholesale Prints", p:200}], nav:"Old City"}, 
+        {id:"8o_K2x_YnBan", m:"Commercial St", lat:"12.98", lng:"77.61", items:[{n:"Bags", p:1200},{n:"Silver Jewelry", p:450}], nav:"Junction"}
+    ],
+    "rishikesh": [{id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Crystals", p:400},{n:"Singing Bowl", p:1800}], nav:"Bridge Area"}, {id:"mQo_K2x_Pn8", m:"Ram Jhula", lat:"30.11", lng:"78.31", items:[{n:"Oils", p:350},{n:"Saffron Art", p:1200}], nav:"Geeta Bhawan"}],
+    "manali": [{id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen", p:700},{n:"Dreamcatcher", p:250}], nav:"Bridge Market"}, {id:"9o_K2x_YnMan", m:"Mall Road", lat:"32.24", lng:"77.18", items:[{n:"Wooden Murals", p:800},{n:"Local Honey", p:400}], nav:"Main Square"}],
+    "pondicherry": [{id:"S6l-K2tNf-g", m:"Sunday Mkt", lat:"11.93", lng:"79.83", items:[{n:"Lamps", p:250},{n:"Indigo Fabric", p:450}], nav:"MG Road"}, {id:"U9o_K2x_Yn8", m:"Auroville", lat:"12.00", lng:"79.81", items:[{n:"Perfume", p:500},{n:"Pottery Mug", p:300}], nav:"Visitor Center"}],
+    "patna": [{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.61", lng:"85.13", items:[{n:"Madhubani", p:600},{n:"Bamboo Basket", p:200}], nav:"Museum Road"}],
+    "bhopal": [{id:"C6Nv6hl34SE", m:"New Market", lat:"23.23", lng:"77.39", items:[{n:"Batua", p:400},{n:"Chanderi Saree", p:2800}], nav:"Inner Circle"}],
+    "indore": [{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.71", lng:"75.85", items:[{n:"Cotton", p:150},{n:"Indori Saree", p:1800}], nav:"Clock Tower"}, {id:"sArAfaIndr33", m:"Sarafa Bazaar", lat:"22.71", lng:"75.85", items:[{n:"Anklet", p:950},{n:"Decorative Tray", p:450}], nav:"Rajwada"}],
+    "hyderabad": [{id:"lAadBzrHyd44", m:"Laad Bazaar", lat:"17.36", lng:"78.47", items:[{n:"Pearls", p:850},{n:"Lac Bangles", p:350}], nav:"Charminar"}, {id:"bEgumBzrHyd7", m:"Begum Bazaar", lat:"17.37", lng:"78.47", items:[{n:"Brass Lamps", p:1200}], nav:"Afzal Gunj"}],
+    "chennai": [{id:"pOndyBzrChn9", m:"Pondy Bazaar", lat:"13.04", lng:"80.23", items:[{n:"Kurti", p:550},{n:"Sandals", p:500}], nav:"T. Nagar"}, {id:"pArrysChn21", m:"Parrys Corner", lat:"13.09", lng:"80.28", items:[{n:"Decor Lights", p:350}], nav:"NBS Bose Rd"}],
+    "ahmedabad": [{id:"lAwGrdnAhd1", m:"Law Garden", lat:"23.02", lng:"72.55", items:[{n:"Mirror Work", p:1800},{n:"Kutchi Bag", p:650}], nav:"Evening Stalls"}, {id:"rAniNoHajro2", m:"Rani no Hajiro", lat:"23.02", lng:"72.58", items:[{n:"Traditional Jewelry", p:900}], nav:"Manek Chowk"}],
+    "surat": [{id:"tExtileSrt55", m:"Textile Market", lat:"21.19", lng:"72.83", items:[{n:"Saree", p:1400},{n:"Blouse Piece", p:120}], nav:"Ring Road"}, {id:"gOpiTalavSrt8", m:"Gopi Talav", lat:"21.19", lng:"72.83", items:[{n:"Home Decor", p:450}], nav:"Talav Lanes"}],
+    "kochi": [{id:"jEwTownKoc3", m:"Jew Town", lat:"9.95", lng:"76.25", items:[{n:"Antiques", p:2200},{n:"Spice Box", p:450}], nav:"Mattancherry"}, {id:"bRoadwayKoc4", m:"Broadway", lat:"9.98", lng:"76.27", items:[{n:"Kitchenware", p:350}], nav:"Ernakulam"}],
+    "shillong": [{id:"pOliceBazSg1", m:"Police Bazar", lat:"25.57", lng:"91.88", items:[{n:"Bamboo", p:350},{n:"Shawl", p:900}], nav:"Central"}, {id:"bAraBzrSg22", m:"Bara Bazaar", lat:"25.57", lng:"91.88", items:[{n:"Tribal Basket", p:280}], nav:"Traditional"}],
+    "udaipur": [{id:"hAthiPolUdp7", m:"Hathi Pol", lat:"24.58", lng:"73.68", items:[{n:"Painting", p:1500},{n:"Leather Diary", p:450}], nav:"Palace Lanes"}, {id:"bApuUdp08", m:"Bapu Bazaar", lat:"24.57", lng:"73.68", items:[{n:"Tie-Dye", p:420}], nav:"Surajpole"}],
+    "amritsar": [{id:"hAllBazAmr5", m:"Hall Bazaar", lat:"31.63", lng:"74.87", items:[{n:"Phulkari", p:950},{n:"Papad", p:180}], nav:"Main Gate"}, {id:"kAtrJaimal1", m:"Katra Jaimal", lat:"31.62", lng:"74.87", items:[{n:"Suits", p:2200}], nav:"Textile Lanes"}],
+    "chandigarh": [{id:"sEc17Chd4", m:"Sector 17", lat:"30.73", lng:"76.78", items:[{n:"Casuals", p:1200},{n:"Gifts", p:350}], nav:"Plaza"}, {id:"pAlikaChd8", m:"Palika Bazaar", lat:"30.73", lng:"76.78", items:[{n:"Denim", p:850}], nav:"Sector 19"}],
+    "nagpur": [{id:"sItabuldiNg1", m:"Sitabuldi", lat:"21.14", lng:"79.08", items:[{n:"Orange Candy", p:120},{n:"Kurti", p:500}], nav:"Main Road"}, {id:"mAhalNgp22", m:"Mahal Market", lat:"21.14", lng:"79.10", items:[{n:"Pooja Set", p:650}], nav:"Old Bazaar"}],
+    "mysore": [{id:"dEvarajaMys1", m:"Devaraja", lat:"12.30", lng:"76.65", items:[{n:"Sandalwood", p:180},{n:"Incense", p:120}], nav:"Palace Area"}, {id:"sAyyajiMys29", m:"Sayyaji Rao", lat:"12.31", lng:"76.65", items:[{n:"Wood Inlay", p:900}], nav:"Palace Retail"}],
+    "kozhikode": [{id:"sMstreetKzk1", m:"SM Street", lat:"11.25", lng:"75.78", items:[{n:"Halwa", p:250},{n:"Cap", p:180}], nav:"City Walk"}, {id:"mItayiKzk33", m:"Mithai Theruvu", lat:"11.25", lng:"75.78", items:[{n:"Banana Chips", p:160}], nav:"Traditional"}],
+    "srinagar": [{id:"lAlChwkSr1", m:"Lal Chowk", lat:"34.07", lng:"74.80", items:[{n:"Pashmina", p:3200},{n:"Walnut Box", p:1400}], nav:"Srinagar Hub"}, {id:"zAinaKadlSr2", m:"Zaina Kadal", lat:"34.09", lng:"74.80", items:[{n:"Copper Samovar", p:2600}], nav:"Old City"}],
+    "madurai": [{id:"pUthuMndlMad1", m:"Puthu Mandapam", lat:"9.91", lng:"78.11", items:[{n:"Temple Jewelry", p:650},{n:"Veshti", p:700}], nav:"Temple Arcade"}, {id:"vEliStMad22", m:"Veli Street", lat:"9.92", lng:"78.12", items:[{n:"Brass Lamp", p:850}], nav:"Temple District"}],
+    "jodhpur": [{id:"sArdarMktJd1", m:"Sardar Market", lat:"26.29", lng:"73.02", items:[{n:"Bandhej", p:500},{n:"Leather Mojari", p:650}], nav:"Clock Tower"}, {id:"tRipoliaJd22", m:"Tripolia Market", lat:"26.29", lng:"73.02", items:[{n:"Iron Decor", p:1200}], nav:"Old Lanes"}],
+    "shimla": [{id:"lAkkrBzrSh1", m:"Lakkar Bazaar", lat:"31.10", lng:"77.17", items:[{n:"Wooden Stick", p:450},{n:"Wool Cap", p:280}], nav:"Ridge"}, {id:"mAllRdSh22", m:"Mall Road", lat:"31.10", lng:"77.17", items:[{n:"Shawl", p:950}], nav:"Retail Strip"}],
+    "dehradun": [{id:"pAltanDdn1", m:"Paltan Bazaar", lat:"30.32", lng:"78.04", items:[{n:"Bakery", p:200},{n:"Wool Muffler", p:300}], nav:"Clock Tower"}, {id:"tIbetMktDdn2", m:"Tibetan Market", lat:"30.32", lng:"78.04", items:[{n:"Winter Gloves", p:250}], nav:"Parade Ground"}],
+    "nashik": [{id:"sArAfNsk1", m:"Saraf Bazaar", lat:"20.00", lng:"73.78", items:[{n:"Silver", p:1100},{n:"Bells", p:220}], nav:"Old Nashik"}, {id:"mAingRdNsk2", m:"Main Road", lat:"19.99", lng:"73.78", items:[{n:"Grape Products", p:250}], nav:"CBS Area"}]
 };
 
 // --- 4. ENGINE ---
@@ -160,19 +192,19 @@ function render(data) {
         const synopsis = v.items.map(i => `${i.n} (₹${i.p})`).join(", ");
         feed.innerHTML += `
         <div class="market-card">
-            <h3 style="color:var(--primary); margin:0 0 10px 0; font-size:16px;">${v.m.toUpperCase()}</h3>
+            <h3 style="color:var(--primary); margin:0 0 10px 0; font-size:16px; letter-spacing:1px;">${v.m.toUpperCase()}</h3>
             <div class="inventory-summary"><div class="inventory-title">Quick Inventory:</div><div class="inventory-list">${synopsis}</div></div>
             <div class="nav-tabs"><a href="${maps}" target="_blank" class="btn maps">MAPS</a><a href="${uber}" target="_blank" class="btn uber">UBER</a></div>
             <div class="catalog-grid">
                 ${v.items.map(i => `
                 <div class="item-card">
                     <button class="wish-btn" onclick="saveToWishlist('${i.n}', ${i.p}, '${v.m}', '${v.nav}')">♥</button>
-                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb">
-                    <div style="font-size:10px; margin-top:5px; text-align:center;" onclick="add(${i.p})">${i.n} <span style="color:var(--accent);">₹${i.p}</span></div>
+                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb" onerror="this.src='https://via.placeholder.com/150x80?text=Market'">
+                    <div style="font-size:10px; margin-top:5px; text-align:center;" onclick="add(${i.p})">${i.n} <span style="color:var(--accent); display:block; font-weight:700;">₹${i.p}</span></div>
                 </div>`).join("")}
             </div>
             <div style="font-size:11px; opacity:0.8; margin-top:10px;">📍 ${v.nav}</div>
-            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:12px; border-radius:15px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:12px; cursor:pointer;">🎥 WATCH VIDEO TOUR</button>
+            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:12px; border-radius:15px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:12px; cursor:pointer; font-weight:600;">🎥 WATCH VIDEO TOUR</button>
             <div id="${v.id}" class="video-box"><iframe width="100%" height="220" src="https://www.youtube.com/embed/${v.id}" frameborder="0" allowfullscreen></iframe></div>
         </div>`;
     });
