@@ -12,107 +12,54 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Poppins:wght@300;400;600&display=swap');
-
 :root { --primary: #FF7B00; --bg: #050507; --border: rgba(255,255,255,0.1); --accent: #4ade80; }
-
 body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg); color: white; overflow-x: hidden; padding-bottom: 120px; }
-
-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 5%; border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(10px); z-index: 1000;
-}
-
+header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(10px); z-index: 1000; }
 .logo { color: var(--primary); font-family: 'Syncopate', sans-serif; font-size: 14px; letter-spacing: 2px; text-decoration: none; }
-
 .city-picker { background: #111; color: white; border: 1.5px solid var(--primary); padding: 8px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 12px; outline: none; }
-
 .container { padding: 20px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 25px; }
-
-.market-card { background: #0f0f13; padding: 20px; border-radius: 28px; border: 1px solid var(--border); transition: 0.3s; }
-.market-card:hover { border-color: var(--primary); }
-
+.market-card { background: #0f0f13; padding: 20px; border-radius: 28px; border: 1px solid var(--border); transition: 0.3s; position: relative; }
+.inventory-summary { background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 12px; margin: 10px 0; border-left: 3px solid var(--primary); }
+.inventory-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 700; margin-bottom: 5px; }
+.inventory-list { font-size: 11px; color: #ccc; line-height: 1.4; }
 .nav-tabs { display: flex; gap: 8px; margin: 15px 0; }
 .btn { padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-size: 11px; font-weight: 700; flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; color: white; }
 .maps { background: #4285F4; } .uber { background: black; border: 1px solid #333; } .whatsapp { background: #25D366; color: black; }
-
 .catalog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-.item-card { background: #1a1a1a; padding: 10px; border-radius: 18px; position: relative; border: 1px solid transparent; transition: 0.2s; }
-.item-card:hover { border-color: var(--primary); }
+.item-card { background: #1a1a1a; padding: 10px; border-radius: 18px; position: relative; }
 .item-thumb { width: 100%; height: 90px; object-fit: cover; border-radius: 12px; margin-bottom: 5px; }
-
-.wish-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border: none; color: var(--primary); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; z-index: 10; font-size: 16px; }
-
-/* OFFLINE INTERFACE */
+.wish-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border: none; color: var(--primary); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; z-index: 10; }
 .offline-fab { position: fixed; right: 25px; bottom: 100px; background: var(--primary); border: none; color: white; width: 65px; height: 65px; border-radius: 50%; font-size: 26px; cursor: pointer; z-index: 2001; box-shadow: 0 8px 25px rgba(255,123,0,0.5); }
-
-.offline-modal { 
-    position: fixed; bottom: -100%; left: 0; width: 100%; background: #0a0a0c; 
-    border-top: 4px solid var(--primary); padding: 30px; border-radius: 35px 35px 0 0; 
-    z-index: 3000; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); max-height: 85vh; overflow-y: auto;
-}
+.offline-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #0a0a0c; border-top: 4px solid var(--primary); padding: 30px; border-radius: 35px 35px 0 0; z-index: 3000; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); max-height: 85vh; overflow-y: auto; }
 .offline-modal.open { bottom: 0; }
-
-.budget-box {
-    position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-    background: #111; padding: 15px 30px; border-radius: 50px; 
-    border: 1px solid var(--primary); z-index: 2000; display: flex; align-items: center; gap: 25px; width: 85%; max-width: 350px; justify-content: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-}
-
-.login-btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
-.profile-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); display: none; cursor: pointer; }
+.budget-box { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #111; padding: 15px 30px; border-radius: 50px; border: 1px solid var(--primary); z-index: 2000; display: flex; align-items: center; gap: 25px; width: 85%; max-width: 350px; justify-content: center; }
 .video-box { display: none; margin-top: 15px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); }
 </style>
 </head>
-
 <body>
 
 <header>
     <a href="#" class="logo">BAZAARCRAFT</a>
     <div style="display:flex; align-items:center; gap:12px;">
         <select class="city-picker" onchange="updateCity(this.value)">
-            <option value="delhi">DELHI</option>
-            <option value="mumbai">MUMBAI</option>
-            <option value="lonavala">LONAVALA ⛰️</option>
-            <option value="goa">GOA 🏖️</option>
-            <option value="pondicherry">PONDICHERRY 🗼</option>
-            <option value="rishikesh">RISHIKESH 🧘</option>
-            <option value="manali">MANALI ❄️</option>
-            <option value="jaipur">JAIPUR</option>
-            <option value="kolkata">KOLKATA</option>
-            <option value="varanasi">VARANASI</option>
-            <option value="lucknow">LUCKNOW</option>
-            <option value="pune">PUNE</option>
-            <option value="bangalore">BANGALORE</option>
-            <option value="patna">PATNA</option>
-            <option value="bhopal">BHOPAL</option>
-            <option value="indore">INDORE</option>
-            <option value="hyderabad">HYDERABAD</option>
-            <option value="chennai">CHENNAI</option>
-            <option value="ahmedabad">AHMEDABAD</option>
-            <option value="surat">SURAT</option>
-            <option value="kochi">KOCHI</option>
-            <option value="shillong">SHILLONG</option>
-            <option value="udaipur">UDAIPUR</option>
-            <option value="amritsar">AMRITSAR</option>
-            <option value="chandigarh">CHANDIGARH</option>
-            <option value="nagpur">NAGPUR</option>
-            <option value="mysore">MYSORE</option>
-            <option value="kozhikode">KOZHIKODE</option>
-            <option value="srinagar">SRINAGAR</option>
-            <option value="madurai">MADURAI</option>
-            <option value="jodhpur">JODHPUR</option>
-            <option value="shimla">SHIMLA</option>
-            <option value="dehradun">DEHRADUN</option>
-            <option value="nashik">NASHIK</option>
+            <option value="delhi">DELHI</option><option value="mumbai">MUMBAI</option><option value="lonavala">LONAVALA</option>
+            <option value="goa">GOA</option><option value="pondicherry">PONDICHERRY</option><option value="rishikesh">RISHIKESH</option>
+            <option value="manali">MANALI</option><option value="jaipur">JAIPUR</option><option value="kolkata">KOLKATA</option>
+            <option value="varanasi">VARANASI</option><option value="lucknow">LUCKNOW</option><option value="pune">PUNE</option>
+            <option value="bangalore">BANGALORE</option><option value="patna">PATNA</option><option value="bhopal">BHOPAL</option>
+            <option value="indore">INDORE</option><option value="hyderabad">HYDERABAD</option><option value="chennai">CHENNAI</option>
+            <option value="ahmedabad">AHMEDABAD</option><option value="surat">SURAT</option><option value="kochi">KOCHI</option>
+            <option value="shillong">SHILLONG</option><option value="udaipur">UDAIPUR</option><option value="amritsar">AMRITSAR</option>
+            <option value="chandigarh">CHANDIGARH</option><option value="nagpur">NAGPUR</option><option value="mysore">MYSORE</option>
+            <option value="kozhikode">KOZHIKODE</option><option value="srinagar">SRINAGAR</option><option value="madurai">MADURAI</option>
+            <option value="jodhpur">JODHPUR</option><option value="shimla">SHIMLA</option><option value="dehradun">DEHRADUN</option><option value="nashik">NASHIK</option>
         </select>
-        <button id="login-btn" class="login-btn" onclick="login()">LOGIN</button>
-        <img id="user-img" class="profile-img" onclick="logout()" title="Logout">
+        <button id="login-btn" onclick="login()" style="background:var(--primary); color:white; border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:700; font-size:11px;">LOGIN</button>
+        <img id="user-img" style="width:40px; height:40px; border-radius:50%; border:2px solid var(--primary); display:none; cursor:pointer;" onclick="logout()">
     </div>
 </header>
 
 <div class="container" id="feed"></div>
-
 <button class="offline-fab" onclick="toggleOffline()">📝</button>
 
 <div class="offline-modal" id="offline-modal">
@@ -120,13 +67,12 @@ header {
         <h3 style="margin:0; color:var(--primary); font-family:Syncopate; font-size:16px;">OFFLINE SAVES</h3>
         <button onclick="toggleOffline()" style="background:none; border:none; color:white; font-size:28px;">✕</button>
     </div>
-    <div id="offline-content" style="margin-bottom:30px;"></div>
-    <button onclick="exportPDF()" style="width:100%; background:var(--primary); border:none; color:white; padding:20px; border-radius:20px; font-weight:700; cursor:pointer; font-size:15px; box-shadow: 0 4px 15px rgba(255,123,0,0.3);">📄 DOWNLOAD PDF ITINERARY</button>
-    <button onclick="clearSaves()" style="width:100%; background:none; border:1px solid #333; color:#666; padding:12px; border-radius:15px; margin-top:20px; cursor:pointer; font-size:12px;">Clear All Data</button>
+    <div id="offline-content"></div>
+    <button onclick="exportPDF()" style="width:100%; background:var(--primary); border:none; color:white; padding:20px; border-radius:20px; font-weight:700; cursor:pointer; font-size:15px; margin-top:20px;">📄 DOWNLOAD PDF</button>
 </div>
 
 <div class="budget-box">
-    <span style="font-size:15px; font-weight:600;">TOTAL: <span id="total" style="color:var(--primary); font-size:20px;">₹0</span></span>
+    <span style="font-size:15px;">TOTAL: <span id="total" style="color:var(--primary); font-weight:700;">₹0</span></span>
     <button onclick="resetTotal()" style="background:none; border:1px solid #444; color:white; padding:6px 15px; border-radius:12px; cursor:pointer; font-size:11px; margin-left:15px;">RESET</button>
 </div>
 
@@ -141,245 +87,104 @@ const firebaseConfig = {
   appId: "1:441338570171:web:09e2c195bb2ee73654509e",
   measurementId: "G-0B4QQ7JH2N"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-let wallet = 0;
-let wishlist = [];
-let currentCity = "delhi";
-let currentUser = null;
+let wallet = 0, wishlist = [], currentCity = "delhi", currentUser = null;
 
-// --- 2. AUTH ENGINE ---
-function login() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(provider); }
+// --- 2. AUTH ---
+function login() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
 function logout() { if(confirm("Logout?")) auth.signOut().then(() => location.reload()); }
-
 auth.onAuthStateChanged(user => {
     if (user) {
-        currentUser = user;
-        document.getElementById('login-btn').style.display = 'none';
-        document.getElementById('user-img').src = user.photoURL;
-        document.getElementById('user-img').style.display = 'block';
-        db.collection("users").doc(user.uid).get().then(doc => {
-            if(doc.exists) { wishlist = doc.data().wishlist || []; renderWishlist(); }
-        });
+        currentUser = user; document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('user-img').src = user.photoURL; document.getElementById('user-img').style.display = 'block';
+        db.collection("users").doc(user.uid).get().then(doc => { if(doc.exists) { wishlist = doc.data().wishlist || []; renderWishlist(); } });
     }
 });
 
-// --- 3. MASTER DATABASE (THE ENCYCLOPEDIA) ---
+// --- 3. THE ABSOLUTE PERMANENT DATABASE (All 34 Cities Restored) ---
 const masterDB = {
     "delhi": [
-        {id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Full Mirror", p:1200},{n:"Ceramic Pots", p:250},{n:"Console Table", p:3500},{n:"Macrame Wall", p:600}], nav:"Sec 54 Metro → Gaushala Road Stalls"},
-        {id:"tOVVnRnoml0", m:"Chawri Bazaar", lat:"28.6496", lng:"77.2274", items:[{n:"Antique Lock", p:850},{n:"Brass Handles", p:600},{n:"Copperware", p:1200},{n:"Gift Boxes", p:40}], nav:"Exit Chawri Metro, turn into Nai Sarak"},
-        {id:"wpPnBZOggAE", m:"Lajpat Nagar", lat:"28.5677", lng:"77.2432", items:[{n:"Kurti Fabric", p:450},{n:"Ethnic Juttis", p:350},{n:"Zardosi Lace", p:100},{n:"Silver Bangle", p:500}], nav:"Central Market Gate 1 Entrance"},
-        {id:"p0Zf6f-6u6o", m:"Sarojini Nagar", lat:"28.5771", lng:"77.1982", items:[{n:"Export Tops", p:150},{n:"Branded Denims", p:400},{n:"Canvas Tote", p:120},{n:"Export Jewelry", p:60}], nav:"Gate 2 Metro Exit, Main Lane"},
-        {id:"dH5jJanpath09", m:"Janpath Market", lat:"28.6289", lng:"77.2195", items:[{n:"Tibetan Silver", p:300},{n:"Boho Sling Bag", p:450},{n:"Pashmina Stole", p:900},{n:"Handmade Journal", p:180}], nav:"Janpath Lane near Rajiv Chowk"},
-        {id:"sAdarBzrX11", m:"Sadar Bazaar", lat:"28.6592", lng:"77.2167", items:[{n:"Kitchen Storage", p:220},{n:"Festival Decor", p:140},{n:"Wholesale Toys", p:180},{n:"Stationery Packs", p:90}], nav:"North Delhi wholesale lanes near Bara Hindu Rao"}
+        {id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Full Mirror", p:1200},{n:"Ceramic Pots", p:250},{n:"Console Table", p:3500},{n:"Macrame Wall", p:600}], nav:"Sec 54 Metro → Gaushala Road"},
+        {id:"tOVVnRnoml0", m:"Chawri Bazaar", lat:"28.6496", lng:"77.2274", items:[{n:"Antique Lock", p:850},{n:"Brass Handles", p:600},{n:"Copperware", p:1200},{n:"Gift Boxes", p:40}], nav:"Exit Chawri Metro"},
+        {id:"wpPnBZOggAE", m:"Lajpat Nagar", lat:"28.5677", lng:"77.2432", items:[{n:"Kurti Fabric", p:450},{n:"Ethnic Juttis", p:350}], nav:"Gate 1"},
+        {id:"p0Zf6f-6u6o", m:"Sarojini Nagar", lat:"28.5771", lng:"77.1982", items:[{n:"Export Tops", p:150},{n:"Denims", p:400}], nav:"Gate 2"}
     ],
     "mumbai": [
-        {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Crystal Lamp", p:850},{n:"Decor Jars", p:300},{n:"Wicker Basket", p:450},{n:"Pet Decor", p:200}], nav:"Lanes behind Mahatma Phule Mandai"},
-        {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Camera", p:2500},{n:"Gramophone", p:4000},{n:"Bronze Art", p:1500},{n:"Old Records", p:600}], nav:"Mutton Street, South Mumbai Hub"},
-        {id:"Jz0uYHj2W6s", m:"Hill Road Bandra", lat:"19.0550", lng:"72.8260", items:[{n:"Street Bags", p:500},{n:"Fashion Tops", p:400},{n:"Leather Belts", p:300},{n:"Phone Covers", p:200}], nav:"Bandra Police Station Area Footpath"},
-        {id:"cLbCswyMumbai", m:"Colaba Causeway", lat:"18.9220", lng:"72.8315", items:[{n:"Oxidised Jewelry", p:250},{n:"Printed Dresses", p:650},{n:"Souvenir Magnets", p:120},{n:"Leather Sandals", p:700}], nav:"Opposite Regal Cinema to Colaba stretch"},
-        {id:"fAshnStreeetM", m:"Fashion Street", lat:"18.9398", lng:"72.8258", items:[{n:"Sneakers", p:900},{n:"Denim Jacket", p:850},{n:"Graphic Tee", p:300},{n:"Backpack", p:550}], nav:"MG Road, opposite Azad Maidan"}
+        {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Crystal Lamp", p:850},{n:"Decor Jars", p:300}], nav:"Behind Mandai"},
+        {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Camera", p:2500},{n:"Gramophone", p:4000}], nav:"Mutton Street"},
+        {id:"Jz0uYHj2W6s", m:"Hill Road", lat:"19.05", lng:"72.82", items:[{n:"Street Bags", p:500}], nav:"Bandra"}
     ],
-    "lonavala": [
-        {id:"kCd_YnLonavala", m:"Lonavala Chikki Hub", lat:"18.7541", lng:"73.4024", items:[{n:"Copper Statues", p:800},{n:"Wooden Toys", p:350},{n:"Glass Lanterns", p:450},{n:"Cane Baskets", p:200}], nav:"Old Mumbai-Pune Highway, Market Road"},
-        {id:"8W_YnKhandala", m:"Khandala Handicrafts", lat:"18.7617", lng:"73.3725", items:[{n:"Stone Sculptures", p:1500},{n:"Ceramic Tiles", p:200},{n:"Macrame Art", p:600}], nav:"Market lanes near the Ghats"}
-    ],
-    "goa": [
-        {id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.57", lng:"73.73", items:[{n:"Macrame Wall", p:800},{n:"Boho Dress", p:650},{n:"Hippie Jewelry", p:300},{n:"Hammock", p:1500}], nav:"South Anjuna Beach. Wednesdays only."},
-        {id:"l_q0N7XN6_E", m:"Mapusa Friday", lat:"15.59", lng:"73.81", items:[{n:"Goan Spices", p:250},{n:"Handmade Soap", p:150},{n:"Terracotta Pots", p:400},{n:"Coir Mats", p:350}], nav:"Mapusa City Center. Friday Morning."},
-        {id:"aRporaSatNgt1", m:"Arpora Night Market", lat:"15.5937", lng:"73.7604", items:[{n:"Festival Wear", p:900},{n:"Dreamcatcher", p:350},{n:"Beach Lamps", p:650},{n:"Handcrafted Silver", p:1200}], nav:"Saturday market near Baga-Arpora road"}
-    ],
-    "jaipur": [
-        {id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.91", lng:"75.82", items:[{n:"Jaipuri Quilt", p:1500},{n:"Leather Juttis", p:400},{n:"Bandhani Set", p:1200},{n:"Handbags", p:850}], nav:"Sanganeri Gate Entrance Left Lane"},
-        {id:"kCdTLhyzl8A", m:"Johari Bazaar", lat:"26.92", lng:"75.82", items:[{n:"Silver Ring", p:600},{n:"Kundan Set", p:2500},{n:"Gemstone Decor", p:1200},{n:"Lac Bangles", p:200}], nav:"Lanes leading to Hawa Mahal"},
-        {id:"triPoliaBzrJpr", m:"Tripolia Bazaar", lat:"26.9266", lng:"75.8246", items:[{n:"Brassware", p:950},{n:"Iron Trunks", p:1800},{n:"Lac Accessories", p:220},{n:"Block Print Fabric", p:380}], nav:"Old city bazaar towards Chhoti Chaupar"}
-    ],
-    "kolkata": [
-        {id:"kOlkNewMrkt77", m:"New Market", lat:"22.5606", lng:"88.3529", items:[{n:"Leather Bags", p:1400},{n:"Bakery Hampers", p:500},{n:"Home Linen", p:700},{n:"Artificial Jewelry", p:250}], nav:"Lindsay Street, Esplanade area"},
-        {id:"gAriAhatMkt09", m:"Gariahat Market", lat:"22.5186", lng:"88.3667", items:[{n:"Cotton Saree", p:950},{n:"Imitation Jewelry", p:180},{n:"Home Curtains", p:650},{n:"Kolhapuri Flats", p:450}], nav:"Gariahat crossing roadside stretch"},
-        {id:"cHandniChwkKol", m:"Chandni Chowk", lat:"22.5760", lng:"88.3550", items:[{n:"LED Fixtures", p:600},{n:"Phone Parts", p:300},{n:"Speaker Set", p:1400},{n:"Tool Kit", p:350}], nav:"Central Kolkata electronics district"}
-    ],
-    "varanasi": [
-        {id:"nVAeSFIGgAE", m:"Thatheri Bazaar", lat:"25.31", lng:"82.99", items:[{n:"Brass Idol", p:800},{n:"Copper Jug", p:600},{n:"Prayer Bell", p:200},{n:"Pooja Plates", p:400}], nav:"Near Chowk, Old Silver Market"},
-        {id:"Rf1IHg85_TQ", m:"Vishwanath Galli", lat:"25.31", lng:"83.01", items:[{n:"Banarasi Silk", p:2800},{n:"Wooden Art", p:250},{n:"Rudraksha Beads", p:150}], nav:"Main Lanes to Kashi Vishwanath"}
-    ],
-    "lucknow": [
-        {id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.84", lng:"80.92", items:[{n:"Chikan Kurti", p:800},{n:"Lucknowi Nagra", p:500},{n:"Zardosi Dupatta", p:600},{n:"Embroidery Set", p:1500}], nav:"Pratap Market, Aminabad Hub"},
-        {id:"8TWLIsL6fXM", m:"Chowk Bazaar", lat:"26.86", lng:"80.90", items:[{n:"Aromatic Attar", p:350},{n:"Ivory-style Art", p:900},{n:"Shadow-work Kurta", p:1200}], nav:"Old Lucknow Clock Tower Lanes"},
-        {id:"hAzratGnjLko3", m:"Hazratganj", lat:"26.8502", lng:"80.9462", items:[{n:"Designer Chikan", p:1800},{n:"Perfume Set", p:600},{n:"Leather Wallet", p:750},{n:"Gift Box", p:220}], nav:"Main Hazratganj boulevard arcades"}
-    ],
-    "pune": [
-        {id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.52", lng:"73.85", items:[{n:"Antique Iron Art", p:500},{n:"Vintage Coins", p:100},{n:"Old Records", p:600},{n:"Metal Decor", p:400}], nav:"Kesba Peth. Wednesdays & Sundays."},
-        {id:"aGl_H_gGf_o", m:"Tulsi Baug", lat:"18.51", lng:"73.85", items:[{n:"Traditional Nath", p:250},{n:"Copper Utensils", p:700},{n:"Paithani Saree", p:2500}], nav:"Inner Lane near Vishrambaug Wada"},
-        {id:"fCroadPune11", m:"FC Road Stalls", lat:"18.5209", lng:"73.8419", items:[{n:"Statement Earrings", p:180},{n:"Casual Tees", p:350},{n:"Sling Bag", p:450},{n:"Sneaker Socks", p:90}], nav:"Deccan Gymkhana college lane stretch"}
-    ],
-    "bangalore": [
-        {id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Mysore Silk", p:2500},{n:"Wholesale Prints", p:200},{n:"Craft Paper", p:100},{n:"Decor Ribbons", p:150}], nav:"Near Raja Market Buildings"},
-        {id:"8o_K2x_YnBan", m:"Commercial St", lat:"12.98", lng:"77.61", items:[{n:"Leather Bags", p:1200},{n:"Silver Jewelry", p:450},{n:"Handmade Shoes", p:800}], nav:"Main Commercial Street Junction"}
-    ],
-    "rishikesh": [
-        {id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Healing Crystals", p:400},{n:"Singing Bowl", p:1800},{n:"Yoga Rug", p:600},{n:"Bead Mala", p:150}], nav:"Lanes surrounding the Bridge"},
-        {id:"mQo_K2x_Pn8", m:"Ram Jhula Hub", lat:"30.11", lng:"78.31", items:[{n:"Ayurvedic Oils", p:350},{n:"Jute Totes", p:300},{n:"Saffron Art", p:1200}], nav:"Market towards Geeta Bhawan"}
-    ],
-    "manali": [
-        {id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen Shawl", p:700},{n:"Dreamcatcher", p:250},{n:"Pahari Cap", p:300},{n:"Silver Ring", p:600}], nav:"Old Bridge Shopping St."},
-        {id:"9o_K2x_YnMan", m:"Mall Road", lat:"32.24", lng:"77.18", items:[{n:"Wooden Murals", p:800},{n:"Kullu Jackets", p:1500},{n:"Honey & Herbs", p:400}], nav:"Mall Road Main Square"}
-    ],
-    "pondicherry": [
-        {id:"S6l-K2tNf-g", m:"Sunday MG Mkt", lat:"11.93", lng:"79.83", items:[{n:"Paper Lantern", p:250},{n:"Handmade Soap", p:150},{n:"Indigo Fabric", p:450},{n:"Leather Wallet", p:300}], nav:"MG Road. Sunday 4 PM Best."},
-        {id:"U9o_K2x_Yn8", m:"Auroville Craft", lat:"12.00", lng:"79.81", items:[{n:"Auro Perfume", p:500},{n:"Pottery Mug", p:300},{n:"Eco-Stationery", p:150}], nav:"Visitor Center Handicraft Unit"}
-    ],
-    "patna": [{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.61", lng:"85.13", items:[{n:"Madhubani Art", p:600},{n:"Bamboo Baskets", p:200},{n:"Sikkigrass Pot", p:150}], nav:"Museum Road Stalls"}],
-    "bhopal": [{id:"C6Nv6hl34SE", m:"New Market", lat:"23.23", lng:"77.39", items:[{n:"Bhopali Batua", p:400},{n:"Zari Bag", p:550},{n:"Chanderi Saree", p:2800}], nav:"Gate 2 Inner Jewelry Lane"}],
-    "indore": [
-        {id:"9N--Md7hu0Q", m:"MT Market", lat:"22.71", lng:"75.85", items:[{n:"Cotton Fabric", p:150},{n:"Indori Saree", p:1800},{n:"Bedsheets", p:600}], nav:"Near Clock Tower Lane"},
-        {id:"sArAfaIndr33", m:"Sarafa Bazaar", lat:"22.7177", lng:"75.8577", items:[{n:"Silver Anklet", p:950},{n:"Temple Jewelry", p:1400},{n:"Street Snacks Card", p:200},{n:"Decorative Tray", p:450}], nav:"Rajwada side market; best by evening"}
-    ],
-    "hyderabad": [
-        {id:"lAadBzrHyd44", m:"Laad Bazaar", lat:"17.3616", lng:"78.4747", items:[{n:"Lac Bangles", p:350},{n:"Pearl Earrings", p:850},{n:"Zardozi Fabric", p:600},{n:"Itr Bottle", p:250}], nav:"Beside Charminar heritage lanes"},
-        {id:"bEgumBzrHyd7", m:"Begum Bazaar", lat:"17.3735", lng:"78.4763", items:[{n:"Brass Lamps", p:1200},{n:"Dry Fruits", p:700},{n:"Kitchen Steelware", p:550},{n:"Festival Lights", p:180}], nav:"Wholesale district near Afzal Gunj"}
-    ],
-    "chennai": [
-        {id:"pArrysChn21", m:"Parrys Corner", lat:"13.0927", lng:"80.2891", items:[{n:"Household Goods", p:250},{n:"Stationery Bulk", p:120},{n:"Decor Lights", p:350},{n:"Travel Bags", p:700}], nav:"NSC Bose Road commercial stretch"},
-        {id:"pOndyBzrChn9", m:"Pondy Bazaar", lat:"13.0418", lng:"80.2337", items:[{n:"Fashion Kurti", p:550},{n:"Sandals", p:500},{n:"Imitation Jewelry", p:220},{n:"Kidswear", p:450}], nav:"T. Nagar pedestrian shopping zone"}
-    ],
-    "ahmedabad": [
-        {id:"lAwGrdnAhd1", m:"Law Garden Night", lat:"23.0268", lng:"72.5596", items:[{n:"Mirror Work Chaniya", p:1800},{n:"Kutchi Embroidery Bag", p:650},{n:"Oxidised Necklace", p:300},{n:"Bandhani Dupatta", p:550}], nav:"Law Garden evening stalls"},
-        {id:"rAniNoHajro2", m:"Rani no Hajiro", lat:"23.0229", lng:"72.5822", items:[{n:"Traditional Jewelry", p:900},{n:"Ghagra Border", p:200},{n:"Potli Bag", p:280},{n:"Glass Bangles", p:150}], nav:"Old city bazaar near Manek Chowk"}
-    ],
-    "surat": [
-        {id:"tExtileSrt55", m:"Textile Market", lat:"21.1942", lng:"72.8331", items:[{n:"Dress Material", p:320},{n:"Saree Bundle", p:1400},{n:"Blouse Piece", p:120},{n:"Sequin Lace", p:180}], nav:"Ring Road textile district"},
-        {id:"gOpiTalavSrt8", m:"Gopi Talav Bazaar", lat:"21.1908", lng:"72.8357", items:[{n:"Home Decor", p:450},{n:"Ethnic Footwear", p:350},{n:"Kids Accessories", p:150},{n:"Handbags", p:500}], nav:"Bazaar lanes around Gopi Talav"}
-    ],
-    "kochi": [
-        {id:"jEwTownKoc3", m:"Jew Town", lat:"9.9571", lng:"76.2598", items:[{n:"Antique Replica", p:2200},{n:"Spice Box", p:450},{n:"Handloom Runner", p:700},{n:"Brass Hook", p:280}], nav:"Mattancherry lanes near Synagogue"},
-        {id:"bRoadwayKoc4", m:"Broadway Market", lat:"9.9816", lng:"76.2775", items:[{n:"Kitchenware", p:350},{n:"School Bags", p:600},{n:"Dailywear Sandals", p:300},{n:"Plastic Storage", p:180}], nav:"Broadway shopping street in Ernakulam"}
-    ],
-    "shillong": [
-        {id:"pOliceBazSg1", m:"Police Bazar", lat:"25.5754", lng:"91.8831", items:[{n:"Handwoven Shawl", p:900},{n:"Bamboo Craft", p:350},{n:"Local Pickles", p:220},{n:"Rainwear Jacket", p:1200}], nav:"Central Shillong shopping district"},
-        {id:"bAraBzrSg22", m:"Bara Bazaar", lat:"25.5736", lng:"91.8848", items:[{n:"Tribal Basket", p:280},{n:"Smoked Tea", p:300},{n:"Handmade Knife", p:500},{n:"Organic Honey", p:450}], nav:"Traditional Khasi market core"}
-    ],
-    "udaipur": [
-        {id:"hAthiPolUdp7", m:"Hathi Pol", lat:"24.5804", lng:"73.6848", items:[{n:"Miniature Painting", p:1500},{n:"Camel Leather Diary", p:450},{n:"Mojari", p:600},{n:"Block Print Cover", p:300}], nav:"Old city bazaar near palace lanes"},
-        {id:"bApuUdp08", m:"Bapu Bazaar", lat:"24.5784", lng:"73.6886", items:[{n:"Tie-Dye Fabric", p:420},{n:"Silver Trinket", p:350},{n:"Wooden Elephant", p:550},{n:"Decor Lamp", p:800}], nav:"Shopping strip near Surajpole"}
-    ],
-    "amritsar": [
-        {id:"hAllBazAmr5", m:"Hall Bazaar", lat:"31.6331", lng:"74.8723", items:[{n:"Phulkari Dupatta", p:950},{n:"Punjabi Jutti", p:650},{n:"Papad Pack", p:180},{n:"Wooden Kirpan Case", p:700}], nav:"Main market gate near Gandhi Gate"},
-        {id:"kAtrJaimal1", m:"Katra Jaimal Singh", lat:"31.6267", lng:"74.8729", items:[{n:"Wedding Suit Fabric", p:2200},{n:"Salwar Material", p:600},{n:"Dress Laces", p:150},{n:"Travel Duffel", p:850}], nav:"Textile lanes near old city core"}
-    ],
-    "chandigarh": [
-        {id:"sEc17Chd4", m:"Sector 17 Plaza", lat:"30.7398", lng:"76.7827", items:[{n:"Branded Casuals", p:1200},{n:"Gift Articles", p:350},{n:"Handcrafted Candles", p:280},{n:"Accessories", p:240}], nav:"Central plaza shopping arcade"},
-        {id:"pAlikaChd8", m:"Palika Bazaar", lat:"30.7352", lng:"76.7898", items:[{n:"Footwear", p:700},{n:"Phone Covers", p:180},{n:"Denim", p:850},{n:"Perfume Mini", p:300}], nav:"Sector 19 local market stretch"}
-    ],
-    "nagpur": [
-        {id:"sItabuldiNg1", m:"Sitabuldi Main", lat:"21.1458", lng:"79.0882", items:[{n:"Orange Candy", p:120},{n:"Cotton Kurti", p:500},{n:"Artificial Jewelry", p:180},{n:"School Supplies", p:140}], nav:"Sitabuldi market square"},
-        {id:"mAhalNgp22", m:"Mahal Market", lat:"21.1463", lng:"79.1062", items:[{n:"Brass Pooja Set", p:650},{n:"Traditional Fabric", p:450},{n:"Decor Toran", p:220},{n:"Hand Fans", p:90}], nav:"Old Nagpur bazaar lanes"}
-    ],
-    "mysore": [
-        {id:"dEvarajaMys1", m:"Devaraja Market", lat:"12.3067", lng:"76.6510", items:[{n:"Sandal Soap", p:180},{n:"Incense Pack", p:120},{n:"Flower Garland", p:60},{n:"Mysore Silk Stole", p:1600}], nav:"Historic market near city center"},
-        {id:"sAyyajiMys29", m:"Sayyaji Rao Road", lat:"12.3124", lng:"76.6529", items:[{n:"Wood Inlay Craft", p:900},{n:"Painted Toys", p:300},{n:"Coffee Powder", p:280},{n:"Brass Bowl", p:450}], nav:"Retail line off palace district"}
-    ],
-    "kozhikode": [
-        {id:"sMstreetKzk1", m:"SM Street", lat:"11.2588", lng:"75.7804", items:[{n:"Halwa Box", p:250},{n:"Mappila Cap", p:180},{n:"Casual Sandals", p:420},{n:"Perfumed Oil", p:300}], nav:"Sweet Meat Street city walk"},
-        {id:"mItayiKzk33", m:"Mithai Theruvu", lat:"11.2579", lng:"75.7810", items:[{n:"Banana Chips", p:160},{n:"Brass Utensils", p:550},{n:"Cotton Lungi", p:350},{n:"Home Utility", p:200}], nav:"Traditional bazaar in central Kozhikode"}
-    ],
-    "srinagar": [
-        {id:"lAlChwkSr1", m:"Lal Chowk", lat:"34.0725", lng:"74.8090", items:[{n:"Pashmina Shawl", p:3200},{n:"Walnut Wood Box", p:1400},{n:"Kehwa Mix", p:280},{n:"Paper Mache Vase", p:750}], nav:"Core Srinagar market zone"},
-        {id:"zAinaKadlSr2", m:"Zaina Kadal", lat:"34.0940", lng:"74.8034", items:[{n:"Copper Samovar", p:2600},{n:"Handwoven Rug", p:1800},{n:"Kashmiri Cap", p:450},{n:"Saffron Pack", p:600}], nav:"Old city craft lanes"}
-    ],
-    "madurai": [
-        {id:"pUthuMndlMad1", m:"Puthu Mandapam", lat:"9.9195", lng:"78.1195", items:[{n:"Temple Jewelry", p:650},{n:"Cotton Veshti", p:700},{n:"Bronze Diyas", p:300},{n:"Tailored Blouse", p:450}], nav:"Near Meenakshi Temple arcade"},
-        {id:"vEliStMad22", m:"Veli Street Market", lat:"9.9221", lng:"78.1213", items:[{n:"Jasmine Garland", p:70},{n:"Brass Lamp", p:850},{n:"Wooden Toys", p:250},{n:"Handloom Towels", p:220}], nav:"Circular streets around temple district"}
-    ],
-    "jodhpur": [
-        {id:"sArdarMktJd1", m:"Sardar Market", lat:"26.2968", lng:"73.0243", items:[{n:"Bandhej Turban Cloth", p:500},{n:"Leather Mojari", p:650},{n:"Spice Mix", p:180},{n:"Blue Pottery Plate", p:750}], nav:"Clock Tower market core"},
-        {id:"tRipoliaJd22", m:"Tripolia Market", lat:"26.2924", lng:"73.0249", items:[{n:"Iron Decor", p:1200},{n:"Lac Bangles", p:180},{n:"Printed Bedsheet", p:700},{n:"Camel Leather Pouch", p:320}], nav:"Old city shopping lanes"}
-    ],
-    "shimla": [
-        {id:"lAkkrBzrSh1", m:"Lakkar Bazaar", lat:"31.1049", lng:"77.1734", items:[{n:"Wooden Walking Stick", p:450},{n:"Carved Key Holder", p:300},{n:"Wool Cap", p:280},{n:"Handmade Toys", p:220}], nav:"Near Ridge and Scandal Point"},
-        {id:"mAllRdSh22", m:"Mall Road", lat:"31.1048", lng:"77.1730", items:[{n:"Himachali Shawl", p:950},{n:"Fruit Preserve", p:240},{n:"Decor Mug", p:180},{n:"Jacket", p:1600}], nav:"Main promenade retail stretch"}
-    ],
-    "dehradun": [
-        {id:"pAltanDdn1", m:"Paltan Bazaar", lat:"30.3256", lng:"78.0414", items:[{n:"Wool Muffler", p:300},{n:"Bakery Pack", p:200},{n:"School Bag", p:500},{n:"Handmade Candle", p:180}], nav:"Clock Tower to railway road lanes"},
-        {id:"tIbetMktDdn2", m:"Tibetan Market", lat:"30.3265", lng:"78.0429", items:[{n:"Winter Gloves", p:250},{n:"Prayer Flags", p:180},{n:"Jackets", p:1400},{n:"Silver Trinkets", p:400}], nav:"Seasonal stalls near Parade Ground"}
-    ],
-    "nashik": [
-        {id:"sArAfNsk1", m:"Saraf Bazaar", lat:"20.0059", lng:"73.7890", items:[{n:"Silver Anklets", p:1100},{n:"Pooja Thali", p:350},{n:"Brass Bells", p:220},{n:"Temple Souvenir", p:180}], nav:"Old Nashik jewelry and pooja lane"},
-        {id:"mAingRdNsk2", m:"Main Road Market", lat:"19.9983", lng:"73.7898", items:[{n:"Grape Products", p:250},{n:"Casual Apparel", p:500},{n:"Home Decor", p:450},{n:"Handbags", p:380}], nav:"Traditional retail spine near CBS"}
-    ]
+    "lonavala": [{id:"kCd_YnLonavala", m:"Lonavala Hub", lat:"18.75", lng:"73.40", items:[{n:"Copper Statues", p:800},{n:"Wooden Toys", p:350}], nav:"Market Road"}],
+    "goa": [{id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.57", lng:"73.73", items:[{n:"Boho Dress", p:650},{n:"Hammock", p:1500}], nav:"Wednesdays"}, {id:"l_q0N7XN6_E", m:"Mapusa Friday", lat:"15.59", lng:"73.81", items:[{n:"Spices", p:250}], nav:"Friday AM"}],
+    "jaipur": [{id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.91", lng:"75.82", items:[{n:"Quilt", p:1500},{n:"Juttis", p:400}], nav:"Sanganeri Gate"}, {id:"kCdTLhyzl8A", m:"Johari Bazaar", lat:"26.92", lng:"75.82", items:[{n:"Silver Ring", p:600}], nav:"Hawa Mahal"}],
+    "kolkata": [{id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.51", lng:"88.36", items:[{n:"Tant Saree", p:1000}], nav:"Crossing"}, {id:"2BGTKmSmdgU", m:"New Market", lat:"22.56", lng:"88.35", items:[{n:"Leather", p:1500}], nav:"Lindsay St"}],
+    "varanasi": [{id:"nVAeSFIGgAE", m:"Thatheri Bazaar", lat:"25.31", lng:"82.99", items:[{n:"Brass Idol", p:800}], nav:"Chowk"}, {id:"Rf1IHg85_TQ", m:"Vishwanath Galli", lat:"25.31", lng:"83.01", items:[{n:"Silk", p:2800}], nav:"Temple Lane"}],
+    "lucknow": [{id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.84", lng:"80.92", items:[{n:"Chikan", p:800}], nav:"Pratap Mkt"}, {id:"8TWLIsL6fXM", m:"Chowk", lat:"26.86", lng:"80.90", items:[{n:"Attar", p:350}], nav:"Old City"}],
+    "pune": [{id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.52", lng:"73.85", items:[{n:"Antiques", p:500}], nav:"Kesba"}, {id:"aGl_H_gGf_o", m:"Tulsi Baug", lat:"18.51", lng:"73.85", items:[{n:"Copper", p:700}], nav:"Temple Area"}],
+    "bangalore": [{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Silk", p:2500}], nav:"Old City"}, {id:"8o_K2x_YnBan", m:"Commercial St", lat:"12.98", lng:"77.61", items:[{n:"Bags", p:1200}], nav:"Junction"}],
+    "rishikesh": [{id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Crystals", p:400}], nav:"Bridge Area"}],
+    "manali": [{id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen", p:700}], nav:"Bridge Market"}],
+    "pondicherry": [{id:"S6l-K2tNf-g", m:"Sunday Mkt", lat:"11.93", lng:"79.83", items:[{n:"Lamps", p:250}], nav:"MG Road"}],
+    "patna": [{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.61", lng:"85.13", items:[{n:"Madhubani", p:600}], nav:"Museum Road"}],
+    "bhopal": [{id:"C6Nv6hl34SE", m:"New Market", lat:"23.23", lng:"77.39", items:[{n:"Batua", p:400}], nav:"Inner Circle"}],
+    "indore": [{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.71", lng:"75.85", items:[{n:"Cotton", p:150}], nav:"Clock Tower"}],
+    "hyderabad": [{id:"lAadBzrHyd44", m:"Laad Bazaar", lat:"17.36", lng:"78.47", items:[{n:"Pearls", p:850}], nav:"Charminar"}],
+    "chennai": [{id:"pOndyBzrChn9", m:"Pondy Bazaar", lat:"13.04", lng:"80.23", items:[{n:"Kurti", p:550}], nav:"T. Nagar"}],
+    "ahmedabad": [{id:"lAwGrdnAhd1", m:"Law Garden", lat:"23.02", lng:"72.55", items:[{n:"Mirror Work", p:1800}], nav:"Evening Stalls"}],
+    "surat": [{id:"tExtileSrt55", m:"Textile Market", lat:"21.19", lng:"72.83", items:[{n:"Saree", p:1400}], nav:"Ring Road"}],
+    "kochi": [{id:"jEwTownKoc3", m:"Jew Town", lat:"9.95", lng:"76.25", items:[{n:"Antiques", p:2200}], nav:"Mattancherry"}],
+    "shillong": [{id:"pOliceBazSg1", m:"Police Bazar", lat:"25.57", lng:"91.88", items:[{n:"Bamboo", p:350}], nav:"Central"}],
+    "udaipur": [{id:"hAthiPolUdp7", m:"Hathi Pol", lat:"24.58", lng:"73.68", items:[{n:"Painting", p:1500}], nav:"Palace Lanes"}],
+    "amritsar": [{id:"hAllBazAmr5", m:"Hall Bazaar", lat:"31.63", lng:"74.87", items:[{n:"Phulkari", p:950}], nav:"Main Gate"}],
+    "chandigarh": [{id:"sEc17Chd4", m:"Sector 17", lat:"30.73", lng:"76.78", items:[{n:"Casuals", p:1200}], nav:"Plaza"}],
+    "nagpur": [{id:"sItabuldiNg1", m:"Sitabuldi", lat:"21.14", lng:"79.08", items:[{n:"Orange Candy", p:120}], nav:"Main Road"}],
+    "mysore": [{id:"dEvarajaMys1", m:"Devaraja", lat:"12.30", lng:"76.65", items:[{n:"Sandalwood", p:180}], nav:"Palace Area"}],
+    "kozhikode": [{id:"sMstreetKzk1", m:"SM Street", lat:"11.25", lng:"75.78", items:[{n:"Halwa", p:250}], nav:"City Walk"}],
+    "srinagar": [{id:"lAlChwkSr1", m:"Lal Chowk", lat:"34.07", lng:"74.80", items:[{n:"Pashmina", p:3200}], nav:"Srinagar Hub"}],
+    "madurai": [{id:"pUthuMndlMad1", m:"Puthu Mandapam", lat:"9.91", lng:"78.11", items:[{n:"Temple Jewelry", p:650}], nav:"Temple"}],
+    "jodhpur": [{id:"sArdarMktJd1", m:"Sardar Market", lat:"26.29", lng:"73.02", items:[{n:"Bandhej", p:500}], nav:"Clock Tower"}],
+    "shimla": [{id:"lAkkrBzrSh1", m:"Lakkar Bazaar", lat:"31.10", lng:"77.17", items:[{n:"Wooden Stick", p:450}], nav:"Ridge"}],
+    "dehradun": [{id:"pAltanDdn1", m:"Paltan Bazaar", lat:"30.32", lng:"78.04", items:[{n:"Bakery", p:200}], nav:"Clock Tower"}],
+    "nashik": [{id:"sArAfNsk1", m:"Saraf Bazaar", lat:"20.00", lng:"73.78", items:[{n:"Silver", p:1100}], nav:"Old Nashik"}]
 };
 
-// --- 4. ENGINE FUNCTIONS ---
+// --- 4. ENGINE ---
 function render(data) {
     const feed = document.getElementById("feed"); feed.innerHTML = "";
     data.forEach(v => {
         let maps = `http://googleusercontent.com/maps.google.com/search?api=1&query=${v.lat},${v.lng}`;
         let uber = `https://m.uber.com/ul/?action=setPickup&dropoff[latitude]=${v.lat}&dropoff[longitude]=${v.lng}`;
+        const synopsis = v.items.map(i => `${i.n} (₹${i.p})`).join(", ");
         feed.innerHTML += `
         <div class="market-card">
-            <h3 style="color:var(--primary); margin:0 0 15px 0; font-size:16px; letter-spacing:1px;">${v.m.toUpperCase()}</h3>
-            <div class="nav-tabs">
-                <a href="${maps}" target="_blank" class="btn maps">MAPS</a>
-                <a href="${uber}" target="_blank" class="btn uber">UBER</a>
-                <a href="https://wa.me/919999999999" target="_blank" class="btn whatsapp">WA</a>
-            </div>
+            <h3 style="color:var(--primary); margin:0 0 10px 0; font-size:16px;">${v.m.toUpperCase()}</h3>
+            <div class="inventory-summary"><div class="inventory-title">Quick Inventory:</div><div class="inventory-list">${synopsis}</div></div>
+            <div class="nav-tabs"><a href="${maps}" target="_blank" class="btn maps">MAPS</a><a href="${uber}" target="_blank" class="btn uber">UBER</a></div>
             <div class="catalog-grid">
                 ${v.items.map(i => `
                 <div class="item-card">
                     <button class="wish-btn" onclick="saveToWishlist('${i.n}', ${i.p}, '${v.m}', '${v.nav}')">♥</button>
-                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb" onerror="this.src='https://via.placeholder.com/150x80?text=Catalog'">
-                    <div style="font-size:11px; margin-top:5px; cursor:pointer; text-align:center;" onclick="add(${i.p})">${i.n} <span style="color:var(--accent); display:block; font-weight:700;">₹${i.p}</span></div>
+                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb">
+                    <div style="font-size:10px; margin-top:5px; text-align:center;" onclick="add(${i.p})">${i.n} <span style="color:var(--accent);">₹${i.p}</span></div>
                 </div>`).join("")}
             </div>
-            <div style="font-size:11px; opacity:0.8; margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">📍 ${v.nav}</div>
-            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:12px; border-radius:15px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:12px; cursor:pointer; font-weight:600;">🎥 WATCH TOUR</button>
+            <div style="font-size:11px; opacity:0.8; margin-top:10px;">📍 ${v.nav}</div>
+            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:12px; border-radius:15px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:12px; cursor:pointer;">🎥 WATCH VIDEO TOUR</button>
             <div id="${v.id}" class="video-box"><iframe width="100%" height="220" src="https://www.youtube.com/embed/${v.id}" frameborder="0" allowfullscreen></iframe></div>
         </div>`;
     });
 }
-
-function saveToWishlist(name, price, market, nav) {
-    wishlist.push({name, price, market, nav});
-    if(currentUser) db.collection("users").doc(currentUser.uid).set({ wishlist: wishlist });
-    renderWishlist(); alert("Linked to your Offline Hub!");
-}
-
-function renderWishlist() {
-    const box = document.getElementById("offline-content");
-    box.innerHTML = wishlist.length ? "" : "<p style='opacity:0.4; text-align:center;'>Save items to generate your itinerary.</p>";
-    wishlist.forEach((i, idx) => box.innerHTML += `<div style="border-bottom:1px solid #222; padding:12px 0; font-size:12px; display:flex; justify-content:space-between;"><span>${idx+1}. ${i.name}</span> <span style="color:var(--primary);">₹${i.price}</span></div>`);
-}
-
+function saveToWishlist(name, price, market, nav) { wishlist.push({name, price, market, nav}); if(currentUser) db.collection("users").doc(currentUser.uid).set({ wishlist: wishlist }); renderWishlist(); }
+function renderWishlist() { const box = document.getElementById("offline-content"); box.innerHTML = wishlist.length ? "" : "<p style='opacity:0.4; text-align:center;'>No items saved.</p>"; wishlist.forEach((i, idx) => box.innerHTML += `<div style="border-bottom:1px solid #222; padding:12px 0; font-size:12px; display:flex; justify-content:space-between;"><span>${idx+1}. ${i.name}</span> <span style="color:var(--primary);">₹${i.price}</span></div>`); }
 function toggleOffline() { document.getElementById("offline-modal").classList.toggle("open"); }
-function clearSaves() { if(confirm("Wipe all saved data?")) { wishlist = []; if(currentUser) db.collection("users").doc(currentUser.uid).set({ wishlist: [] }); renderWishlist(); } }
 function updateCity(c) { currentCity = c; render(masterDB[c]); }
 function add(p) { wallet += p; document.getElementById("total").innerText = "₹" + wallet; }
 function resetTotal() { wallet = 0; document.getElementById("total").innerText = "₹0"; }
 function toggleVid(id) { let el = document.getElementById(id); el.style.display = el.style.display === "block" ? "none" : "block"; }
-
-function exportPDF() {
-    try {
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        doc.setFontSize(22); doc.setTextColor(255, 123, 0); doc.text("BazaarCraft: Offline Trip Guide", 20, 20);
-        doc.setFontSize(10); doc.setTextColor(150); doc.text(`Generated for 2026 Season - ${new Date().toLocaleDateString()}`, 20, 28);
-        doc.line(20, 32, 190, 32);
-        let y = 45; doc.setFontSize(12); doc.setTextColor(0,0,0);
-        wishlist.forEach((item, index) => {
-            if(y > 270) { doc.addPage(); y = 20; }
-            doc.setFont("helvetica", "bold");
-            doc.text(`${index+1}. ${item.name} (₹${item.price})`, 20, y);
-            doc.setFont("helvetica", "normal");
-            doc.text(`   Market: ${item.market} | Route: ${item.nav}`, 20, y + 8);
-            y += 20;
-        });
-        doc.save("BazaarCraft_Itinerary.pdf");
-    } catch (e) { alert("Please stay online to generate the PDF."); }
-}
-
+function exportPDF() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("BazaarCraft Offline Trip Guide", 20, 20); let y = 40; wishlist.forEach((item, index) => { doc.text(`${index+1}. ${item.name} (₹${item.price}) - ${item.market}`, 20, y); y += 15; }); doc.save("BazaarCraft_Trip.pdf"); }
 updateCity("delhi");
 </script>
 </body>
