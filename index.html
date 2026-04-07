@@ -41,20 +41,20 @@ header {
 
 .wish-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); border: none; color: var(--primary); border-radius: 50%; width: 25px; height: 25px; cursor: pointer; }
 
-/* FIXED WISHLIST FOR MOBILE */
-.wishlist-btn { position: fixed; right: 20px; bottom: 85px; background: var(--primary); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 2001; box-shadow: 0 4px 15px rgba(255,123,0,0.4); }
+/* OFFLINE PANEL (MOBILE FIXED) */
+.offline-fab { position: fixed; right: 20px; bottom: 85px; background: var(--primary); border: none; color: white; width: 60px; height: 60px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 2001; box-shadow: 0 4px 20px rgba(255,123,0,0.5); font-weight: bold; }
 
-.wishlist-modal { 
+.offline-modal { 
     position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; 
-    border-top: 2px solid var(--primary); padding: 20px; border-radius: 25px 25px 0 0; 
-    z-index: 3000; transition: 0.4s ease; max-height: 80vh; overflow-y: auto;
+    border-top: 3px solid var(--primary); padding: 25px; border-radius: 30px 30px 0 0; 
+    z-index: 3000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 85vh; overflow-y: auto;
 }
-.wishlist-modal.open { bottom: 0; }
+.offline-modal.open { bottom: 0; }
 
 .budget-box {
     position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
     background: #111; padding: 12px 25px; border-radius: 40px; 
-    border: 1px solid var(--primary); z-index: 2000; display: flex; align-items: center; gap: 20px; width: 80%; max-width: 300px; justify-content: center;
+    border: 1px solid var(--primary); z-index: 2000; display: flex; align-items: center; gap: 20px; width: 85%; max-width: 320px; justify-content: center;
 }
 
 .login-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 11px; }
@@ -76,9 +76,14 @@ header {
             <option value="rishikesh">RISHIKESH ⛰️</option>
             <option value="manali">MANALI ❄️</option>
             <option value="jaipur">JAIPUR</option>
+            <option value="kolkata">KOLKATA</option>
             <option value="varanasi">VARANASI</option>
             <option value="lucknow">LUCKNOW</option>
+            <option value="pune">PUNE</option>
             <option value="bangalore">BANGALORE</option>
+            <option value="patna">PATNA</option>
+            <option value="bhopal">BHOPAL</option>
+            <option value="indore">INDORE</option>
         </select>
         <button id="login-btn" class="login-btn" onclick="login()">LOGIN</button>
         <img id="user-img" class="profile-img" onclick="logout()">
@@ -87,24 +92,25 @@ header {
 
 <div class="container" id="feed"></div>
 
-<button class="wishlist-btn" onclick="toggleWishlist()">❤️</button>
+<button class="offline-fab" onclick="toggleOffline()">📝</button>
 
-<div class="wishlist-modal" id="wish-modal">
+<div class="offline-modal" id="offline-modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 style="margin:0; color:var(--primary);">MY SAVED FINDS</h3>
-        <button onclick="toggleWishlist()" style="background:none; border:none; color:white; font-size:20px;">✕</button>
+        <h3 style="margin:0; color:var(--primary); font-family:Syncopate; font-size:14px;">OFFLINE SAVES</h3>
+        <button onclick="toggleOffline()" style="background:none; border:none; color:white; font-size:24px;">✕</button>
     </div>
-    <div id="wishlist-content" style="margin-bottom:20px;"></div>
-    <button onclick="exportPDF()" style="width:100%; background:var(--primary); border:none; color:white; padding:15px; border-radius:15px; font-weight:700; cursor:pointer;">📄 DOWNLOAD PDF ITINERARY</button>
+    <div id="offline-content" style="margin-bottom:25px;"></div>
+    <button onclick="exportPDF()" style="width:100%; background:var(--primary); border:none; color:white; padding:18px; border-radius:18px; font-weight:700; cursor:pointer; font-size:14px;">📄 DOWNLOAD PDF ITINERARY</button>
+    <button onclick="clearSaves()" style="width:100%; background:none; border:1px solid #333; color:#666; padding:10px; border-radius:15px; margin-top:15px; cursor:pointer; font-size:11px;">Clear All Saves</button>
 </div>
 
 <div class="budget-box">
     <span style="font-size:14px; font-weight:600;">TOTAL: <span id="total" style="color:var(--primary);">₹0</span></span>
-    <button onclick="resetTotal()" style="background:none; border:1px solid #444; color:white; padding:5px 12px; border-radius:10px; cursor:pointer; font-size:10px;">RESET</button>
+    <button onclick="resetTotal()" style="background:none; border:1px solid #444; color:white; padding:5px 12px; border-radius:10px; cursor:pointer; font-size:10px; margin-left:10px;">RESET</button>
 </div>
 
 <script>
-// --- FIREBASE CONFIG (Pre-filled with your keys) ---
+// --- 1. FIREBASE CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyDQPbexaLV0te_3u1cGV5MYMys3rJfVeAA",
   authDomain: "bazaarcraft.firebaseapp.com",
@@ -114,6 +120,7 @@ const firebaseConfig = {
   appId: "1:441338570171:web:09e2c195bb2ee73654509e",
   measurementId: "G-0B4QQ7JH2N"
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -123,6 +130,7 @@ let wishlist = [];
 let currentCity = "delhi";
 let currentUser = null;
 
+// --- 2. AUTH & CLOUD ---
 function login() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(provider); }
 function logout() { if(confirm("Logout?")) auth.signOut().then(() => location.reload()); }
 
@@ -138,19 +146,35 @@ auth.onAuthStateChanged(user => {
     }
 });
 
+// --- 3. MASTER DATABASE (FULL 15 CITIES) ---
 const masterDB = {
-    "delhi": [{id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Mirrors", p:800},{n:"Ceramics", p:200}], nav:"Sec 54 Metro"}],
-    "mumbai": [{id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Lamps", p:400}], nav:"Behind Mandai"}],
-    "goa": [{id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.5797", lng:"73.7384", items:[{n:"Macrame", p:600}], nav:"Wednesdays"}],
-    "jaipur":[{id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.9189", lng:"75.8236", items:[{n:"Mojaris", p:350}], nav:"Sanganeri Gate"}],
-    "varanasi":[{id:"nVAeSFIGgAE", m:"Thatheri", lat:"25.3117", lng:"82.9996", items:[{n:"Brass", p:500}], nav:"Chowk"}],
-    "lucknow":[{id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.8457", lng:"80.9272", items:[{n:"Chikan", p:700}], nav:"Pratap Mkt"}],
-    "pondicherry":[{id:"S6l-K2tNf-g", m:"Sunday Mkt", lat:"11.93", lng:"79.83", items:[{n:"Lamps", p:250}], nav:"MG Road"}],
-    "rishikesh":[{id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Crystals", p:300}], nav:"Bridge Area"}],
-    "manali":[{id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen", p:450}], nav:"Old Bridge"}],
-    "bangalore":[{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Silk", p:1500}], nav:"Old City"}]
+    "delhi": [
+        {id:"gVVK5Q6-OG0", m:"Banjara Market", lat:"28.4132", lng:"77.1000", items:[{n:"Mirrors", p:800},{n:"Ceramics", p:200}], nav:"Sec 54 Metro → Gaushala Road"},
+        {id:"tOVVnRnoml0", m:"Chawri Bazaar", lat:"28.6496", lng:"77.2274", items:[{n:"Antique Decor", p:1200}], nav:"Near Standard Sweets"}
+    ],
+    "mumbai": [
+        {id:"2x-2aqYnjTk", m:"Crawford Market", lat:"18.9472", lng:"72.8340", items:[{n:"Lamps", p:400}], nav:"Behind Mandai"},
+        {id:"k0HhWjGd9XQ", m:"Chor Bazaar", lat:"18.9619", lng:"72.8310", items:[{n:"Vintage Hub", p:1000}], nav:"Mutton Street"}
+    ],
+    "goa": [
+        {id:"V9_W_1mCqZg", m:"Anjuna Flea", lat:"15.57", lng:"73.73", items:[{n:"Macrame", p:600}], nav:"Wednesdays Only"},
+        {id:"l_q0N7XN6_E", m:"Mapusa Friday", lat:"15.59", lng:"73.81", items:[{n:"Pottery", p:350}], nav:"Friday Morning"}
+    ],
+    "jaipur":[{id:"_Ut-aGpCVaU", m:"Bapu Bazar", lat:"26.91", lng:"75.82", items:[{n:"Mojaris", p:350}], nav:"Sanganeri Gate"}],
+    "kolkata":[{id:"vxqcwUGuTIU", m:"Gariahat", lat:"22.51", lng:"88.36", items:[{n:"Tant Saree", p:900}], nav:"Near Flyover"}],
+    "varanasi":[{id:"nVAeSFIGgAE", m:"Thatheri", lat:"25.31", lng:"82.99", items:[{n:"Brassware", p:500}], nav:"Near Chowk"}],
+    "lucknow":[{id:"V_jYSLeCxQ4", m:"Aminabad", lat:"26.84", lng:"80.92", items:[{n:"Chikan", p:700}], nav:"Pratap Mkt"}],
+    "pondicherry":[{id:"S6l-K2tNf-g", m:"Sunday Mkt", lat:"11.93", lng:"79.83", items:[{n:"Paper Lamps", p:250}], nav:"MG Road"}],
+    "rishikesh":[{id:"pT7rK2_Nf8w", m:"Laxman Jhula", lat:"30.12", lng:"78.32", items:[{n:"Crystals", p:300}], nav:"Bridge Lanes"}],
+    "manali":[{id:"Ca_Fr3_YnP8", m:"Old Manali", lat:"32.25", lng:"77.18", items:[{n:"Woolen Art", p:450}], nav:"Old Bridge"}],
+    "pune":[{id:"1g3nGOsMH0A", m:"Juna Bazaar", lat:"18.52", lng:"73.85", items:[{n:"Antiques", p:400}], nav:"Kesba Area"}],
+    "bangalore":[{id:"Tv3gGVG2F38", m:"Chickpet", lat:"12.96", lng:"77.57", items:[{n:"Silk Saree", p:1500}], nav:"Old City"}],
+    "patna":[{id:"tp10ZagNXfA", m:"Maurya Lok", lat:"25.61", lng:"85.13", items:[{n:"Handicraft", p:250}], nav:"Museum Rd"}],
+    "bhopal":[{id:"C6Nv6hl34SE", m:"New Market", lat:"23.23", lng:"77.39", items:[{n:"Bead Bag", p:300}], nav:"Gate 2 area"}],
+    "indore":[{id:"9N--Md7hu0Q", m:"MT Market", lat:"22.71", lng:"75.85", items:[{n:"Fabric", p:400}], nav:"Clock Tower"}]
 };
 
+// --- 4. ENGINE FUNCTIONS ---
 function render(data) {
     const feed = document.getElementById("feed"); feed.innerHTML = "";
     data.forEach(v => {
@@ -168,12 +192,12 @@ function render(data) {
                 ${v.items.map(i => `
                 <div class="item-card">
                     <button class="wish-btn" onclick="saveToWishlist('${i.n}', ${i.p}, '${v.m}', '${v.nav}')">♥</button>
-                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb">
+                    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="item-thumb" onerror="this.src='https://via.placeholder.com/150x80?text=Market'">
                     <div style="font-size:11px; margin-top:5px; cursor:pointer;" onclick="add(${i.p})">${i.n} <span style="color:var(--accent);">₹${i.p}</span></div>
                 </div>`).join("")}
             </div>
             <div style="font-size:11px; opacity:0.8; margin-top:10px;">📍 ${v.nav}</div>
-            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:8px; border-radius:10px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:10px; cursor:pointer;">WATCH TOUR</button>
+            <button onclick="toggleVid('${v.id}')" style="width:100%; padding:10px; border-radius:12px; border:1px solid #333; background:none; color:white; font-size:11px; margin-top:10px; cursor:pointer;">🎥 WATCH TOUR</button>
             <div id="${v.id}" class="video-box"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${v.id}" frameborder="0" allowfullscreen></iframe></div>
         </div>`;
     });
@@ -182,16 +206,17 @@ function render(data) {
 function saveToWishlist(name, price, market, nav) {
     wishlist.push({name, price, market, nav});
     if(currentUser) db.collection("users").doc(currentUser.uid).set({ wishlist: wishlist });
-    renderWishlist(); alert("Saved to Offline List!");
+    renderWishlist(); alert("Saved to Offline Hub!");
 }
 
 function renderWishlist() {
-    const box = document.getElementById("wishlist-content");
-    box.innerHTML = wishlist.length ? "" : "<p style='opacity:0.5'>No items saved yet.</p>";
-    wishlist.forEach(i => box.innerHTML += `<div style="border-bottom:1px solid #222; padding:8px 0; font-size:12px;">${i.name} - ₹${i.price}</div>`);
+    const box = document.getElementById("offline-content");
+    box.innerHTML = wishlist.length ? "" : "<p style='opacity:0.4'>No items saved for offline use yet.</p>";
+    wishlist.forEach(i => box.innerHTML += `<div style="border-bottom:1px solid #222; padding:10px 0; font-size:12px;">${i.name} - ₹${i.price} (@${i.market})</div>`);
 }
 
-function toggleWishlist() { document.getElementById("wish-modal").classList.toggle("open"); }
+function toggleOffline() { document.getElementById("offline-modal").classList.toggle("open"); }
+function clearSaves() { wishlist = []; if(currentUser) db.collection("users").doc(currentUser.uid).set({ wishlist: [] }); renderWishlist(); }
 function updateCity(c) { currentCity = c; render(masterDB[c]); }
 function add(p) { wallet += p; document.getElementById("total").innerText = "₹" + wallet; }
 function resetTotal() { wallet = 0; document.getElementById("total").innerText = "₹0"; }
@@ -200,13 +225,16 @@ function toggleVid(id) { let el = document.getElementById(id); el.style.display 
 function exportPDF() {
     try {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        doc.setFontSize(22); doc.setTextColor(255, 123, 0); doc.text("BazaarCraft Itinerary", 20, 20);
+        doc.setFontSize(22); doc.setTextColor(255, 123, 0); doc.text("BazaarCraft: Offline Guide", 20, 20);
         let y = 40; doc.setFontSize(12); doc.setTextColor(0,0,0);
         wishlist.forEach((item, index) => {
-            doc.text(`${index+1}. ${item.name} (₹${item.price}) - ${item.market}`, 20, y); y += 10;
+            if(y > 270) { doc.addPage(); y = 20; }
+            doc.text(`${index+1}. ${item.name} (₹${item.price})`, 20, y);
+            doc.text(`   Market: ${item.market} | Gali: ${item.nav}`, 20, y + 8);
+            y += 20;
         });
-        doc.save("BazaarCraft_Trip.pdf");
-    } catch (e) { alert("PDF Error. Ensure internet is connected."); }
+        doc.save("BazaarCraft_Offline_Trip.pdf");
+    } catch (e) { alert("PDF Error: Please check internet connection."); }
 }
 
 updateCity("delhi");
