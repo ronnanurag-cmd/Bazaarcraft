@@ -129,15 +129,16 @@ input, select.filter-select { padding: 10px; border-radius: 12px; border: 1px so
 
 <script>
 // --- 1. FIREBASE INITIALIZATION ---
-// Replace these with your actual Firebase project settings
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDQPbexaLV0te_3u1cGV5MYMys3rJfVeAA",
+  authDomain: "bazaarcraft.firebaseapp.com",
+  projectId: "bazaarcraft",
+  storageBucket: "bazaarcraft.firebasestorage.app",
+  messagingSenderId: "441338570171",
+  appId: "1:441338570171:web:09e2c195bb2ee73654509e",
+  measurementId: "G-0B4QQ7JH2N"
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -204,7 +205,7 @@ function render(data) {
     feed.innerHTML = "";
     data.forEach(v => {
         if(v.items.length === 0) return;
-        let maps = `https://www.google.com/maps/search/?api=1&query=${v.lat},${v.lng}`;
+        let maps = `http://googleusercontent.com/maps.google.com/search?api=1&query=${v.lat},${v.lng}`;
         let uber = `https://m.uber.com/ul/?action=setPickup&dropoff[latitude]=${v.lat}&dropoff[longitude]=${v.lng}`;
         
         feed.innerHTML += `
@@ -270,13 +271,18 @@ function filterBudget(val) {
 function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("BazaarCraft: My Shopping Itinerary", 20, 20);
+    doc.setFontSize(22);
+    doc.setTextColor(255, 123, 0);
+    doc.text("BazaarCraft Itinerary", 20, 20);
+    doc.setFontSize(12);
+    doc.setTextColor(0,0,0);
     let y = 35;
     wishlist.forEach((item, index) => {
-        doc.text(`${index+1}. ${item.name} (₹${item.price}) @ ${item.market}`, 20, y);
+        if(y > 270) { doc.addPage(); y = 20; }
+        doc.text(`${index+1}. ${item.name} (₹${item.price}) - ${item.market}`, 20, y);
         y += 10;
     });
-    doc.save("My_BazaarCraft_Trip.pdf");
+    doc.save("BazaarCraft_Trip.pdf");
 }
 
 // Start
