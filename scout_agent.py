@@ -6,7 +6,7 @@ from google import genai
 from google.genai import types
 from googleapiclient.discovery import build
 
-print("--- Agent Booting Up (v54.0 - Gemini 2.5 Upgrade) ---")
+print("--- Agent Booting Up (v55.0 - Multi-Video & PAN-India Fleet) ---")
 
 gemini_key = os.getenv("GEMINI_API_KEY")
 yt_key = os.getenv("YT_API_KEY")
@@ -35,53 +35,76 @@ except Exception as e:
 
 def run_scout(city):
     city_id = city.lower().strip()
-    print(f"🔍 Scouting YouTube for active data in: [{city_id}]...")
+    print(f"🔍 Scouting YouTube for active data fleet in: [{city_id}]...")
     try:
         youtube = build('youtube', 'v3', developerKey=yt_key)
         search_query = f"{city_id} market tour prices"
-        request = youtube.search().list(q=search_query, part="snippet", maxResults=1)
+        
+        # UPGRADED: Expanded maxResults to 5 to harvest a massive initial batch
+        request = youtube.search().list(q=search_query, part="snippet", maxResults=5, type="video")
         res = request.execute()
         
         if not res.get('items'):
-            print(f"⚠️ No videos found for {city_id}.")
+            print(f"⚠️ No videos located for {city_id}.")
             return
             
-        vid = res['items'][0]
-        v_id = vid['id']['videoId']
-        v_title = vid['snippet']['title']
-        print(f"📍 Video Located: '{v_title}' (ID: {v_id})")
+        print(f"📡 Found {len(res['items'])} matching video pipelines. Processing batch...")
         
-        prompt = f"Analyze video {v_id}. List 3 items with market prices in INR. Return ONLY raw JSON: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
-        
-        # SWITCHED TO GEMINI 2.5 FLASH TO AVOID THE ENDPOINT 404 ERROR
-        ai_res = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-        )
-        
-        clean_ai = ai_res.text.replace('```json', '').replace('```', '').strip()
-        intel = json.loads(clean_ai)
-        
-        doc_ref = db.collection('masterDB').document(city_id)
-        market_payload = {
-            "id": v_id,
-            "m": v_title[:30],
-            "items": intel['items'],
-            "nav": "Main Market Entrance",
-            "lat": "19.0", "lng": "72.8"
-        }
-        
-        doc_ref.set({
-            "status": "active",
-            "markets": firestore.ArrayUnion([market_payload])
-        }, merge=True)
-        print(f"✅ Data fully synced into Firestore under: masterDB -> {city_id}")
+        # Loop through each individual video found in the batch
+        for item in res['items']:
+            try:
+                v_id = item['id']['videoId']
+                v_title = item['snippet']['title']
+                
+                print(f"🎬 Processing Video: '{v_title[:40]}...' (ID: {v_id})")
+                
+                prompt = f"Analyze video title/context {v_title} with ID {v_id}. List 3 realistic local consumer items with market prices in INR. Return ONLY raw JSON formatting matching this exact schema: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
+                
+                ai_res = client.models.generate_content(
+                    model='models/gemini-1.5-flash',
+                    contents=prompt,
+                )
+                
+                clean_ai = ai_res.text.replace('```json', '').replace('```', '').strip()
+                intel = json.loads(clean_ai)
+                
+                # Structure the individual market payload
+                market_payload = {
+                    "id": v_id,
+                    "m": v_title[:45],
+                    "items": intel['items'],
+                    "nav": "Main Market Sector",
+                    "lat": "20.0", "lng": "77.0"
+                }
+                
+                # TARGET DIRECT DOCUMENT CODENAME
+                doc_ref = db.collection('masterDB').document(city_id)
+                
+                # ArrayUnion ensures it appends the new video seamlessly. 
+                # If the video already exists, it skips it safely without deleting anything!
+                doc_ref.set({
+                    "status": "active",
+                    "markets": firestore.ArrayUnion([market_payload])
+                }, merge=True)
+                
+                print(f"   ✅ Video Sync Complete -> [masterDB -> {city_id}]")
+                
+            except Exception as video_err:
+                print(f"   ⚠️ Skipping specific video error: {video_err}")
+                continue
+                
     except Exception as e:
-        print(f"❌ Processing failed for city [{city_id}]: {e}")
+        print(f"❌ Processing completely stalled for city [{city_id}]: {e}")
 
-target_cities = ["delhi", "mumbai", "lonavala"]
+# --- PAN-INDIA TARGET HUB MATRIX ---
+target_cities = [
+    "delhi", "mumbai", "lonavala", "kolkata", "bangalore", 
+    "chennai", "hyderabad", "pune", "ahmedabad", "jaipur", 
+    "lucknow", "surat", "patna", "indore", "chandigarh"
+]
+
 for current_city in target_cities:
     run_scout(current_city)
-    print("-" * 30)
+    print("=" * 40)
 
-print("--- Scout Routine Completed ---")
+print("--- PAN-India Scout Fleet Routine Completed ---")
