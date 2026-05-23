@@ -22,10 +22,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install firebase-admin google-genai google-api-python-client
 
-      - name: Run Agent
+      # STEP 1: RUN THE SHOPPING AGENT ALONE
+      - name: Run Shopping Agent
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: python scout_agent.py
-             python food_scout.py
+
+      # STEP 2: PAUSE 60 SECONDS TO RESET GEMINI QUOTA LIMITS
+      - name: Cool Down Period
+        run: sleep 60
+
+      # STEP 3: RUN THE FOOD AGENT ALONE
+      - name: Run Foodcraft Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: python food_scout.py
