@@ -1,12 +1,13 @@
 import os
 import json
+import time  # ADDED FOR RATE LIMITING
 import firebase_admin
 from firebase_admin import credentials, firestore
 from google import genai
 from google.genai import types
 from googleapiclient.discovery import build
 
-print("--- Foodcraft Agent Booting Up (v1.0 - Local Specialties) ---")
+print("--- Foodcraft Agent Booting Up (v1.1 - Rate Limited Culinary Fleet) ---")
 
 gemini_key = os.getenv("GEMINI_API_KEY")
 yt_key = os.getenv("YT_API_KEY")
@@ -38,8 +39,6 @@ def run_food_scout(city):
     print(f"🍔 Scouting Foodcraft highlights for: [{city_id}]...")
     try:
         youtube = build('youtube', 'v3', developerKey=yt_key)
-        
-        # TARGETED SEARCH: Tailored specifically to skip high-end restaurants and find local treats
         search_query = f"{city_id} local street food tour specialties prices"
         
         request = youtube.search().list(q=search_query, part="snippet", maxResults=3, type="video")
@@ -63,7 +62,6 @@ def run_food_scout(city):
                 
                 print(f"🍲 Parsing Food Video: '{v_title[:40]}...'")
                 
-                # SPECIALIZED PROMPT: Forces Gemini to focus on local pocket-friendly snacks
                 prompt = (
                     f"Analyze the local food video titled '{v_title}'. "
                     f"Identify 3 famous local street food items or cheap regional specialties "
@@ -87,7 +85,6 @@ def run_food_scout(city):
                     "lat": "20.0", "lng": "77.0"
                 }
                 
-                # ROUTING DIRECTLY TO THE NEW SEPARATE FOOD DATABASE COLLECTION
                 doc_ref = db.collection('foodDB').document(city_id)
                 doc_ref.set({
                     "status": "active",
@@ -95,6 +92,10 @@ def run_food_scout(city):
                 }, merge=True)
                 
                 print(f"   ✅ Foodcraft Sync Complete -> [foodDB -> {city_id}]")
+                
+                # FIXED: Sleep 12 seconds between items to stay safely under 5 requests per minute
+                print("   ⏳ Pacing food API footprint... sleeping 12s...")
+                time.sleep(12)
                 
             except Exception as video_err:
                 print(f"   ⚠️ Skipping food video breakdown: {video_err}")
