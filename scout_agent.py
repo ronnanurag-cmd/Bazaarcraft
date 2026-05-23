@@ -6,7 +6,7 @@ from google import genai
 from google.genai import types
 from googleapiclient.discovery import build
 
-print("--- Agent Booting Up (v55.0 - Multi-Video & PAN-India Fleet) ---")
+print("--- Agent Booting Up (v57.0 - Production Gemini 2.5 Fleet) ---")
 
 gemini_key = os.getenv("GEMINI_API_KEY")
 yt_key = os.getenv("YT_API_KEY")
@@ -40,7 +40,6 @@ def run_scout(city):
         youtube = build('youtube', 'v3', developerKey=yt_key)
         search_query = f"{city_id} market tour prices"
         
-        # UPGRADED: Expanded maxResults to 5 to harvest a massive initial batch
         request = youtube.search().list(q=search_query, part="snippet", maxResults=5, type="video")
         res = request.execute()
         
@@ -50,7 +49,6 @@ def run_scout(city):
             
         print(f"📡 Found {len(res['items'])} matching video pipelines. Processing batch...")
         
-        # Loop through each individual video found in the batch
         for item in res['items']:
             try:
                 v_id = item['id']['videoId']
@@ -60,15 +58,15 @@ def run_scout(city):
                 
                 prompt = f"Analyze video title/context {v_title} with ID {v_id}. List 3 realistic local consumer items with market prices in INR. Return ONLY raw JSON formatting matching this exact schema: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
                 
+                # FIXED: Upgraded to 'gemini-2.5-flash' to completely avoid the endpoint 404 block
                 ai_res = client.models.generate_content(
-                    model='models/gemini-1.5-flash',
+                    model='gemini-2.5-flash',
                     contents=prompt,
                 )
                 
                 clean_ai = ai_res.text.replace('```json', '').replace('```', '').strip()
                 intel = json.loads(clean_ai)
                 
-                # Structure the individual market payload
                 market_payload = {
                     "id": v_id,
                     "m": v_title[:45],
@@ -77,11 +75,7 @@ def run_scout(city):
                     "lat": "20.0", "lng": "77.0"
                 }
                 
-                # TARGET DIRECT DOCUMENT CODENAME
                 doc_ref = db.collection('masterDB').document(city_id)
-                
-                # ArrayUnion ensures it appends the new video seamlessly. 
-                # If the video already exists, it skips it safely without deleting anything!
                 doc_ref.set({
                     "status": "active",
                     "markets": firestore.ArrayUnion([market_payload])
@@ -96,11 +90,10 @@ def run_scout(city):
     except Exception as e:
         print(f"❌ Processing completely stalled for city [{city_id}]: {e}")
 
-# --- PAN-INDIA TARGET HUB MATRIX ---
+# COMPLETE COMMERCIAL MATRICES
 target_cities = [
     "delhi", "mumbai", "lonavala", "kolkata", "bangalore", 
-    "chennai", "hyderabad", "pune", "ahmedabad", "jaipur", 
-    "lucknow", "surat", "patna", "indore", "chandigarh"
+    "chennai", "hyderabad", "pune", "ahmedabad", "jaipur"
 ]
 
 for current_city in target_cities:
