@@ -1,95 +1,30 @@
-import os
-import json
-import firebase_admin
-from firebase_admin import credentials, firestore
-# SWITCHED TO THE NEW OFFICIAL SDK TO FIX LINE 14 WARNING
-from google import genai
-from google.genai import types
-from googleapiclient.discovery import build
+name: BazaarCraft Scout Agent
 
-print("--- Agent Booting Up (v51.0 - Modern GenAI) ---")
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'
 
-# 1. LOAD REPOSITORY SECRETS
-gemini_key = os.getenv("GEMINI_API_KEY")
-yt_key = os.getenv("YT_API_KEY")
-firebase_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-# 2. FIREBASE INITIALIZATION
-try:
-    if not firebase_json:
-        raise ValueError("FIREBASE_SERVICE_ACCOUNT secret is empty!")
-    clean_json = firebase_json.strip()
-    cred_dict = json.loads(clean_json)
-    if not firebase_admin._apps:
-        cred = credentials.Certificate(cred_dict)
-        firebase_admin.initialize_app(cred)
-    db = firestore.client()
-    print("✅ Firebase Authorization: Connected")
-except Exception as e:
-    print(f"❌ FIREBASE CRASH: {e}")
-    exit(1)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-# 3. NEW GEMINI CLIENT CONFIGURATION
-try:
-    # Modern SDK initialization format
-    client = genai.Client(api_key=gemini_key)
-    print("✅ Gemini AI Status: Online (New SDK)")
-except Exception as e:
-    print(f"❌ GEMINI AI CRASH: {e}")
-    exit(1)
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install firebase-admin google-genai google-api-python-client
 
-# 4. SCOUTING ENGINE
-def run_scout(city):
-    city_id = city.lower().strip()
-    print(f"🔍 Scouting YouTube for active data in: [{city_id}]...")
-    try:
-        youtube = build('youtube', 'v3', developerKey=yt_key)
-        search_query = f"{city_id} market tour prices"
-        request = youtube.search().list(q=search_query, part="snippet", maxResults=1)
-        res = request.execute()
-        
-        if not res.get('items'):
-            print(f"⚠️ No videos found for {city_id}.")
-            return
-            
-        vid = res['items'][0]
-        v_id = vid['id']['videoId']
-        v_title = vid['snippet']['title']
-        print(f"📍 Video Located: '{v_title}' (ID: {v_id})")
-        
-        # Call using the new client format
-        prompt = f"Analyze video {v_id}. List 3 items with market prices in INR. Return ONLY raw JSON: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
-        
-        ai_res = client.models.generate_content(
-            model='gemini-1.5-flash',
-            contents=prompt,
-        )
-        
-        clean_ai = ai_res.text.replace('```json', '').replace('```', '').strip()
-        intel = json.loads(clean_ai)
-        
-        # TARGET DIRECT DOCUMENT CODENAME
-        doc_ref = db.collection('masterDB').document(city_id)
-        market_payload = {
-            "id": v_id,
-            "m": v_title[:30],
-            "items": intel['items'],
-            "nav": "Main Market Entrance",
-            "lat": "19.0", "lng": "72.8"
-        }
-        
-        doc_ref.set({
-            "status": "active",
-            "markets": firestore.ArrayUnion([market_payload])
-        }, merge=True)
-        print(f"✅ Data fully synced into Firestore under: masterDB -> {city_id}")
-    except Exception as e:
-        print(f"⚠️ Processing failed for city [{city_id}]: {e}")
-
-# --- 5. EXECUTION ENGINE ---
-target_cities = ["delhi", "mumbai", "lonavala"]
-for current_city in target_cities:
-    run_scout(current_city)
-    print("-" * 30)
-
-print("--- Scout Routine Completed ---")
+      - name: Run Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: python scout_agent.py
