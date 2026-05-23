@@ -1,12 +1,13 @@
 import os
 import json
+import time  # ADDED FOR RATE LIMITING
 import firebase_admin
 from firebase_admin import credentials, firestore
 from google import genai
 from google.genai import types
 from googleapiclient.discovery import build
 
-print("--- Agent Booting Up (v57.0 - Production Gemini 2.5 Fleet) ---")
+print("--- Agent Booting Up (v59.0 - Rate Limited Shopping Fleet) ---")
 
 gemini_key = os.getenv("GEMINI_API_KEY")
 yt_key = os.getenv("YT_API_KEY")
@@ -58,7 +59,6 @@ def run_scout(city):
                 
                 prompt = f"Analyze video title/context {v_title} with ID {v_id}. List 3 realistic local consumer items with market prices in INR. Return ONLY raw JSON formatting matching this exact schema: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
                 
-                # FIXED: Upgraded to 'gemini-2.5-flash' to completely avoid the endpoint 404 block
                 ai_res = client.models.generate_content(
                     model='gemini-2.5-flash',
                     contents=prompt,
@@ -83,6 +83,10 @@ def run_scout(city):
                 
                 print(f"   ✅ Video Sync Complete -> [masterDB -> {city_id}]")
                 
+                # FIXED: Sleep 12 seconds between items to stay safely under 5 requests per minute
+                print("   ⏳ Pacing API footprint... sleeping 12s...")
+                time.sleep(12)
+                
             except Exception as video_err:
                 print(f"   ⚠️ Skipping specific video error: {video_err}")
                 continue
@@ -90,7 +94,7 @@ def run_scout(city):
     except Exception as e:
         print(f"❌ Processing completely stalled for city [{city_id}]: {e}")
 
-# COMPLETE COMMERCIAL MATRICES
+# PAN-INDIA TARGET CODENAMES
 target_cities = [
     "delhi", "mumbai", "lonavala", "kolkata", "bangalore", 
     "chennai", "hyderabad", "pune", "ahmedabad", "jaipur"
