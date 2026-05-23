@@ -6,7 +6,7 @@ from google import genai
 from google.genai import types
 from googleapiclient.discovery import build
 
-print("--- Agent Booting Up (v53.0 - Perfected Model Path) ---")
+print("--- Agent Booting Up (v54.0 - Gemini 2.5 Upgrade) ---")
 
 gemini_key = os.getenv("GEMINI_API_KEY")
 yt_key = os.getenv("YT_API_KEY")
@@ -53,9 +53,9 @@ def run_scout(city):
         
         prompt = f"Analyze video {v_id}. List 3 items with market prices in INR. Return ONLY raw JSON: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
         
-        # FIXED: Explicitly naming the full API string path model
+        # SWITCHED TO GEMINI 2.5 FLASH TO AVOID THE ENDPOINT 404 ERROR
         ai_res = client.models.generate_content(
-            model='models/gemini-1.5-flash',
+            model='gemini-2.5-flash',
             contents=prompt,
         )
         
