@@ -28,3 +28,4 @@ jobs:
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: python scout_agent.py
+             python food_scout.py
