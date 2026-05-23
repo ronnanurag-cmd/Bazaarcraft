@@ -1,23 +1,95 @@
-name: BazaarCraft Scout Agent
-on:
-  schedule:
-    - cron: '0 0 * * *' # Runs every night at midnight
-  workflow_dispatch: # Allows you to run it manually
+import os
+import json
+import firebase_admin
+from firebase_admin import credentials, firestore
+import google.generativeai as genai
+from googleapiclient.discovery import build
 
-jobs:
-  scout:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install Dependencies
-        run: pip install google-generativeai google-api-python-client firebase-admin
-      - name: Run Agent
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          YT_API_KEY: ${{ secrets.YT_API_KEY }}
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: python scout_agent.py
+print("--- Agent Booting Up (v50.0) ---")
+
+# 1. LOAD REPOSITORY SECRETS
+gemini_key = os.getenv("GEMINI_API_KEY")
+yt_key = os.getenv("YT_API_KEY")
+firebase_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+
+# 2. FIREBASE AUTO-INITIALIZATION
+try:
+    if not firebase_json:
+        raise ValueError("CRITICAL: FIREBASE_SERVICE_ACCOUNT secret is empty!")
+    clean_json = firebase_json.strip()
+    cred_dict = json.loads(clean_json)
+    if not firebase_admin._apps:
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+    db = firestore.client()
+    print("✅ Firebase Authorization: Connected")
+except Exception as e:
+    print(f"❌ FIREBASE CRASH: {e}")
+    exit(1)
+
+# 3. AI BRAIN CONFIGURATION (Updated Model String)
+try:
+    genai.configure(api_key=gemini_key)
+    # Using the standardized model path to fix the 404 error
+    model = genai.GenerativeModel('models/gemini-1.5-flash-latest')
+    print("✅ Gemini AI Status: Online")
+except Exception as e:
+    print(f"❌ GEMINI AI CRASH: {e}")
+    exit(1)
+
+# 4. AUTOMATED SCOUTING ENGINE
+def run_scout(city):
+    city_id = city.lower().strip()
+    print(f"🔍 Scouting YouTube for active data in: [{city_id}]...")
+    
+    try:
+        youtube = build('youtube', 'v3', developerKey=yt_key)
+        search_query = f"{city_id} market tour prices"
+        request = youtube.search().list(q=search_query, part="snippet", maxResults=1)
+        res = request.execute()
+        
+        if not res.get('items'):
+            print(f"⚠️ No videos found for {city_id}.")
+            return
+            
+        vid = res['items'][0]
+        v_id = vid['id']['videoId']
+        v_title = vid['snippet']['title']
+        print(f"📍 Video Located: '{v_title}' (ID: {v_id})")
+        
+        # Pass to Gemini
+        prompt = f"Analyze video {v_id}. List 3 local items with realistic market prices in INR. Return ONLY raw JSON formatting matching this scheme: {{\"items\":[{{\"n\":\"Item Name\",\"p\":500}}]}}"
+        ai_res = model.generate_content(prompt)
+        
+        clean_ai = ai_res.text.replace('```json', '').replace('```', '').strip()
+        intel = json.loads(clean_ai)
+        
+        # TARGET DIRECT DOCUMENT CODENAME
+        doc_ref = db.collection('masterDB').document(city_id)
+        
+        market_payload = {
+            "id": v_id,
+            "m": v_title[:30],
+            "items": intel['items'],
+            "nav": "Main Market Entrance",
+            "lat": "19.0", "lng": "72.8"
+        }
+        
+        doc_ref.set({
+            "status": "active",
+            "markets": firestore.ArrayUnion([market_payload])
+        }, merge=True)
+        
+        print(f"✅ Data fully synced into Firestore under: masterDB -> {city_id}")
+        
+    except Exception as e:
+        print(f"⚠️ Processing failed for city [{city_id}]: {e}")
+
+# --- 5. RUN ENGINE ---
+target_cities = ["delhi", "mumbai", "lonavala"]
+
+for current_city in target_cities:
+    run_scout(current_city)
+    print("-" * 30)
+
+print("--- Scout Routine Completed ---")
